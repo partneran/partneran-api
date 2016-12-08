@@ -5,6 +5,8 @@ const cors = require('cors')
 
 const app = express()
 
+// const User = require('../../models/models.api.users')
+
 // JSON Web Tokens
 const jwt = require('jsonwebtoken')
 
@@ -24,9 +26,9 @@ app.use(bodyParser.urlencoded({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(Users.authenticate()))
-passport.serializeUser(Users.serializeUser());
-passport.deserializeUser(Users.deserializeUser());
+// passport.use(new LocalStrategy(Users.authenticate()))
+// passport.serializeUser(Users.serializeUser());
+// passport.deserializeUser(Users.deserializeUser());
 
 app.listen(PORT, (err) => {
   if(err){
