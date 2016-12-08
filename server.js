@@ -5,7 +5,11 @@ const cors = require('cors')
 
 const app = express()
 
-// const User = require('../../models/models.api.users')
+/*
+  * Models
+*/
+const models = require ('./models')
+const Users = models.Users
 
 // JSON Web Tokens
 const jwt = require('jsonwebtoken')
@@ -24,11 +28,10 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(passport.initialize());
-app.use(passport.session());
 
-// passport.use(new LocalStrategy(Users.authenticate()))
-// passport.serializeUser(Users.serializeUser());
-// passport.deserializeUser(Users.deserializeUser());
+passport.use(new LocalStrategy(Users.authenticate()))
+passport.serializeUser(Users.serializeUser());
+passport.deserializeUser(Users.deserializeUser());
 
 app.listen(PORT, (err) => {
   if(err){
@@ -47,5 +50,8 @@ create db_partneran_dev in postgres server, choose owner : postgres
 
 migrate :
 sequelize db:migrate
+
+testing :
+db_partneran_dev
 
 */

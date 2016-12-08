@@ -27,7 +27,7 @@ const passport = require('passport')
 /*
   * Models
 */
-const models = require ('./models')
+const models = require ('../../models')
 const Users = models.Users
 
 /* ================================================ */
@@ -57,8 +57,8 @@ describe('Register new user', () => {
           user: process.env.EMAIL_GMAIL,
           pass: process.env.PASS_GMAIL
       },
-      logger: false, // log to console
-      debug: false // include SMTP traffic in the logs
+      logger: true, // log to console
+      debug: true // include SMTP traffic in the logs
     });
 
     var mailOptions = {
@@ -68,59 +68,61 @@ describe('Register new user', () => {
         text: 'Please click this link to verify your email', // plaintext body
         html: `<a href="http://localhost:3000/api/auth/verification/${token}" alt="_target">click this link to verify</a>` // html body
     };
+    // transporter.sendMail(mailOptions, function(error, info){
+    //   if(error){
+    //       console.log(error);
+    //       // return res.json(error)
+    //       // expect(error).to.be.an('error')
+    //       done()
+    //   }else{
+    //     console.log(info);
+    //   }
+    //   // console.log('Message sent: ' + info.response);
+    //   //
+    //
+    // });
+    
+    Users.register({
+      userId: 1,
+      email: "kenduigraha@yahoo.com",
+      photo_URL: 'test_photo.png',
+      verify: false
+    },'123', (err, new_user) => {
 
-    transporter.sendMail(mailOptions, function(error, info){
-      if(error){
-          console.log(error);
-          // return res.json(error)
-          expect(error).to.be.an('error')
-          done()
+      if(err){
+        console.log(err);
+        // res.status(400).json(err)
+        expect(err).to.be.an('error')
+        done()
+      }else {
+        // console.log(new_user.dataValues);
+        // res.json(new_user)
+        res.should.be.json
+        res.should.have.status(200)
+
+        expect(new_user).to.be.an('object')
+        expect(new_user).to.have.ownProperty('userId')
+        expect(new_user).to.have.ownProperty('myhash')
+        expect(new_user).to.have.ownProperty('mysalt')
+        expect(new_user).to.have.ownProperty('email')
+        expect(new_user).to.have.ownProperty('photo_URL')
+        expect(new_user).to.have.ownProperty('verify')
+
+        new_user.userId.should.equal(1)
+        new_user.email.should.equal("kenduigraha@yahoo.com")
+        new_user.photo_URL.should.equal("test_photo.png")
+        new_user.verify.should.equal(false)
+
+        done()
       }
-      console.log('Message sent: ' + info.response);
-
-      Users.register({
-        userId: 1,
-        email: "kenduigraha@yahoo.com",
-        photo_URL: 'test_photo.png',
-        verify: false
-      },'123', (err, new_user) => {
-
-        if(err){
-          console.log(err);
-          // res.status(400).json(err)
-          expect(err).to.be.an('error')
-          done()
-        }else {
-          // console.log(new_user.dataValues);
-          // res.json(new_user)
-          res.should.be.json
-          res.should.have.status(200)
-
-          expect(new_user).to.be.an('object')
-          expect(new_user).to.have.ownProperty('userId')
-          expect(new_user).to.have.ownProperty('myhash')
-          expect(new_user).to.have.ownProperty('mysalt')
-          expect(new_user).to.have.ownProperty('email')
-          expect(new_user).to.have.ownProperty('photo_URL')
-          expect(new_user).to.have.ownProperty('verify')
-
-          new_user.userId.should.equal(1)
-          new_user.email.should.equal("kenduigraha@yahoo.com")
-          new_user.photo_URL.should.equal("test_photo.png")
-          new_user.verify.should.equal(false)
-
-          done()
-        }
-      })
-  });
-
+    })
   })
 })
 
 /*
   * End Point : /api/users/login
 */
-describe('Login a user', () => {
+describe.skip('Login a user', () => {
   it('should login a user and generate token with user\'s information',(done) => {
     passport.authenticate('local', {}, (err, user, info) => {
       if(err){

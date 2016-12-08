@@ -1,4 +1,6 @@
 'use strict';
+var passportLocalSequelize = require('passport-local-sequelize')
+
 module.exports = function(sequelize, DataTypes) {
   var Users = sequelize.define('Users', {
     userId: DataTypes.INTEGER,
@@ -14,5 +16,11 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  passportLocalSequelize.attachToUser(Users, {
+    usernameField: 'username',
+    hashField: 'myhash',
+    saltField: 'mysalt'
+  })
   return Users;
 };
