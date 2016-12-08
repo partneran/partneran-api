@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   passportLocalSequelize.attachToUser(Users, {
-    usernameField: 'username',
+    usernameField: 'email',
     hashField: 'myhash',
     saltField: 'mysalt'
   })

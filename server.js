@@ -51,6 +51,8 @@ create db_partneran_dev in postgres server, choose owner : postgres
 migrate :
 sequelize db:migrate
 
+edit users model, config passport-local-sequelize
+
 testing :
 db_partneran_dev
 

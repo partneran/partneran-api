@@ -40,48 +40,9 @@ const Users = models.Users
 
 /*
   * end point : /api/auth/signup
-  * email verification end point : /api/auth/verification/:token
 */
-describe('Register new user', () => {
-  it('should create new user in database and send email verification with token', (done) => {
-    var token = jwt.sign({
-                  userId: 1,
-                  email: "kenduigraha@yahoo.com",
-                  photo_URL: 'test_photo.png',
-                  verify: false
-              }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
-
-    var transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-          user: process.env.EMAIL_GMAIL,
-          pass: process.env.PASS_GMAIL
-      },
-      logger: true, // log to console
-      debug: true // include SMTP traffic in the logs
-    });
-
-    var mailOptions = {
-        from: '"Ken Duigraha Putra ?" <kendui94@yahoo.com>', // sender address
-        to: `kenduigraha@yahoo.com`, // list of receivers
-        subject: 'Test Subject Register', // Subject line
-        text: 'Please click this link to verify your email', // plaintext body
-        html: `<a href="http://localhost:3000/api/auth/verification/${token}" alt="_target">click this link to verify</a>` // html body
-    };
-    // transporter.sendMail(mailOptions, function(error, info){
-    //   if(error){
-    //       console.log(error);
-    //       // return res.json(error)
-    //       // expect(error).to.be.an('error')
-    //       done()
-    //   }else{
-    //     console.log(info);
-    //   }
-    //   // console.log('Message sent: ' + info.response);
-    //   //
-    //
-    // });
-    
+describe.skip('Register new user', () => {
+  it('should create new user in database with hardcode data', (done) => {
     Users.register({
       userId: 1,
       email: "kenduigraha@yahoo.com",
@@ -118,6 +79,10 @@ describe('Register new user', () => {
     })
   })
 })
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//  test end point user
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 /*
   * End Point : /api/users/login
@@ -167,6 +132,48 @@ describe.skip('Login a user', () => {
     })
   })
 })
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  test end point user
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+
+
+/*
+
+buat controller regis uservar token = jwt.sign({
+              userId: 1,
+              email: "kenduigraha@yahoo.com",
+              photo_URL: 'test_photo.png',
+              verify: false
+          }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
+
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+      user: process.env.EMAIL_GMAIL,
+      pass: process.env.PASS_GMAIL
+  },
+  logger: false, // log to console
+  debug: false // include SMTP traffic in the logs
+});
+
+var mailOptions = {
+    from: '"Ken Duigraha Putra ?" <kendui94@yahoo.com>', // sender address
+    to: `kenduigraha@yahoo.com`, // list of receivers
+    subject: 'Test Subject Register', // Subject line
+    text: 'Please click this link to verify your email', // plaintext body
+    html: `<a href="http://localhost:8080/api/auth/verification/${token}" alt="_target">click this link to verify</a>` // html body
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if(error){
+      console.log(`error`);
+      console.log(error);
+      // return res.json(error)
+      // expect(error).to.be.an('error')
+      return done()
+  }else{
+    console.log('Message sent: ' + info.response);
+    done()
+  }
+
+});
+
+*/
