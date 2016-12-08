@@ -87,6 +87,8 @@ ideaId: DataTypes.INTEGER(FK)
 ```javascript
 notificationId: DataTypes.INTEGER,
 message: DataTypes.STRING,
+status: DataTypes.BOOLEAN,
+userid: DataTypes.INTEGER(FK),
 ideaId: DataTypes.INTEGER(FK)
 ```
 ## User_notifs
@@ -99,13 +101,26 @@ notificationId: DataTypes.INTEGER(FK)
 ## API
 Default development port and host : http://localhost:3000/
 
+#### seeders
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/seeders | POST | seeders dummy data |
+
 #### Users
 | Routes | HTTP | Description |
 |--------|------|-------------|
-| /api/users/login | POST | login user |
-| /api/users | POST | process new user |
 | /api/users/:id | PUT  | edit a user |
 | /api/users/:id | DELETE | delete a user |
+| /api/users/forgot | POST | forgot `password |
+| /api/users/password | POST | new password |
+
+#### Auth
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/auth/login | POST | login a user |
+| /api/auth/signup | POST | process signup a user |
+| /api/auth/login/:token | GET | process email verification a user & login |
+| /api/auth/forgot/:token | GET | process forgot password email verification & login |
 
 #### Ideas
 | Routes | HTTP | Description |
@@ -127,3 +142,9 @@ Default development port and host : http://localhost:3000/
 |--------|------|-------------|
 | /api/ideas/:ideaid/votes/ | POST | add 1 vote |
 | /api/ideas/:ideaid/votes/ | DELETE | remove 1 vote |
+
+#### Notifications
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/notif/ | POST | process new notification & passing ideaId & userId |
+| /api/notif/done | POST | process mark notification as done |
