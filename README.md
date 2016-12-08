@@ -18,6 +18,7 @@ server side of partneran
 14. mocha
 15. chai
 16. dotenv
+17. chai-http
 
 # Testing
 ## Integration (End Point)
