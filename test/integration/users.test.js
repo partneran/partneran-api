@@ -3,12 +3,12 @@ const chaiHTTP = require('chai-http')
 const expect = chai.expect
 const should = chai.should()
 chai.use(chaiHTTP)
-// const User = require('../../models/models.api.users')
+const User = require('../../models/models.api.users')
 const nodemailer = require('nodemailer')
 const dotenv = require('dotenv')
 dotenv.load()
 const jwt = require('jsonwebtoken')
-
+const passport = require('passport')
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test model database users
@@ -25,7 +25,7 @@ describe('Register new user', () => {
                   email: "kenduigraha@yahoo.com",
                   photo_URL: 'test_photo.png',
                   verify: false
-              }, 'secret', { expiresIn: 60 }) // expire in 1 hour
+              }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
 
     var transporter = nodemailer.createTransport({
       service: 'Gmail',
@@ -69,6 +69,9 @@ describe('Register new user', () => {
         }else {
           // console.log(new_user.dataValues);
           // res.json(new_user)
+          res.should.be.json
+          res.should.have.status(200)
+
           expect(new_user).to.be.an('object')
           expect(new_user).to.have.ownProperty('userId')
           expect(new_user).to.have.ownProperty('myhash')
@@ -90,6 +93,54 @@ describe('Register new user', () => {
   })
 })
 
+/*
+  * End Point : /api/users/login
+*/
+describe('Login a user', () => {
+  it('should login a user and generate token with user\'s information',(done) => {
+    passport.authenticate('local', {}, (err, user, info) => {
+      if(err){
+        // return res.status(400).json(err)
+        done()
+      }else{
+        if(user != false){
+          // console.log(user);
+          var token = {
+            token: jwt.sign({
+              sub: user.userId,
+              email: user.email,
+              photo_URL: user.photo_URL,
+              verify: user.verify
+            }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
+          }
+
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(new_user).to.be.an('object')
+          expect(new_user).to.have.ownProperty('userId')
+          expect(new_user).to.have.ownProperty('myhash')
+          expect(new_user).to.have.ownProperty('mysalt')
+          expect(new_user).to.have.ownProperty('email')
+          expect(new_user).to.have.ownProperty('photo_URL')
+          expect(new_user).to.have.ownProperty('verify')
+
+          new_user.userId.should.equal(1)
+          new_user.email.should.equal("kenduigraha@yahoo.com")
+          new_user.photo_URL.should.equal("test_photo.png")
+          new_user.verify.should.equal(false)
+
+          done()
+          // return res.status(200).json()
+        }else{
+          // return res.status(400).json(info)
+
+          done()
+        }
+      }
+    })
+  })
+})
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test end point user
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
