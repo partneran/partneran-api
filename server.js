@@ -37,3 +37,10 @@ app.listen(PORT, (err) => {
     console.log(`server is running in port ${PORT}`);
   }
 })
+/*
+db name : db_partneran_dev
+
+create table users :
+sequelize model:create --name Users --attributes "userId:integer,email:string,myhash:string(1024),mysalt:string,photo_URL:string,verify:boolean"
+
+*/
