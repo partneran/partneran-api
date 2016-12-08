@@ -1,14 +1,38 @@
+/*
+  * testing
+*/
 const chai = require('chai')
 const chaiHTTP = require('chai-http')
 const expect = chai.expect
 const should = chai.should()
 chai.use(chaiHTTP)
-const User = require('../../models/models.api.users')
+
+/*
+  * email
+*/
 const nodemailer = require('nodemailer')
+
+/*
+  * .env
+*/
 const dotenv = require('dotenv')
 dotenv.load()
+
+/*
+  * auth
+*/
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
+
+/*
+  * Models
+*/
+const models = require ('./models')
+const Users = models.Users
+
+/* ================================================ */
+/*                     Testing                       */
+/* ================================================ */
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test model database users

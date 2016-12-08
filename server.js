@@ -43,4 +43,9 @@ db name : db_partneran_dev
 create table users :
 sequelize model:create --name Users --attributes "userId:integer,email:string,myhash:string(1024),mysalt:string,photo_URL:string,verify:boolean"
 
+create db_partneran_dev in postgres server, choose owner : postgres
+
+migrate :
+sequelize db:migrate
+
 */
