@@ -21,6 +21,13 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(Users.authenticate()))
+passport.serializeUser(Users.serializeUser());
+passport.deserializeUser(Users.deserializeUser());
+
 app.listen(PORT, (err) => {
   if(err){
     console.error(err);
