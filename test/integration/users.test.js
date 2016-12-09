@@ -129,7 +129,7 @@ describe('Get one user', () => {
   * test edit a user
   * end point : /api/users/:id
 */
-describe.only('Edit one user', () => {
+describe('Edit one user', () => {
   it('should update one user\'s data', (done) => {
     Users
       .findAll()

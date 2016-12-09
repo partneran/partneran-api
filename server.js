@@ -4,7 +4,10 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const app = express()
-
+/*
+  * ROUTES
+*/
+const routeUsers = require('./routes/routes.api.users')
 /*
   * Models
 */
@@ -26,6 +29,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
 }))
+app.use('/api/users', routeUsers)
 
 app.use(passport.initialize());
 
