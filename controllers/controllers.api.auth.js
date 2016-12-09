@@ -46,7 +46,7 @@ let testingSignUp = (req, res, next) => {
 */
 let signUpUser = (req, res, next) => {
   var token = jwt.sign({
-                sub: user.id,
+                sub: req.body.id,
                 name: req.body.name,
                 email: req.body.email,
                 photo_URL: req.body.photo_URL,
@@ -74,9 +74,11 @@ let signUpUser = (req, res, next) => {
 transport.sendMail(mailOptions, function(error, info) {
   if (error) {
     console.log(error);
+    res.json(error)
   }
   else{
     console.log('Message sent: ' + info.response);
+
     Users.register({
       userId: req.body.userId,
       email: req.body.email,

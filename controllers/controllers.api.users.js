@@ -160,7 +160,7 @@ let testSubmitNewPasswordForgotPassword = (req, res) => {
         email: req.body.email
       }
     })
-    .then((err, user_forgot) => {
+    .then((user_forgot, err) => {
       if(err) {
         console.log(err);
         res.json(err)

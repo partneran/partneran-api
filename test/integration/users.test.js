@@ -221,6 +221,16 @@ describe('Delete one user', () => {
   * End Point : /api/auth/signup
 */
 describe('Register new user using API End Point', () => {
+  beforeEach('should delete all users from database', (done) => {
+    Users
+      .destroy({
+        where: {}
+      })
+      .then((data) => {
+        done()
+      })
+  })
+
   it('should register a user, generate token with user\'s information and send email verification', (done) => {
     var new_user = {
       userId: 1,
@@ -482,14 +492,22 @@ describe('Delete a user', () => {
   })
 })
 
+before('should delete all users from database', (done) => {
+  Users
+    .destroy({
+      where: {}
+    })
+    .then((data) => {
+      done()
+    })
+})
+
 after('should delete all users from database', (done) => {
   Users
     .destroy({
       where: {}
     })
     .then((data) => {
-      // console.log(data);
-      expect(data).to.be.equal(0)
       done()
     })
 })
