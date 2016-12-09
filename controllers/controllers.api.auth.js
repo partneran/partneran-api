@@ -27,7 +27,7 @@ let testingSignUp = (req, res, next) => {
   Users.register({
     userId: req.body.userId,
     email: req.body.email,
-    photo_URL: req.body.photo_URL,
+    // photo_URL: req.body.photo_URL,
     verify: false,
     name: req.body.name
   },req.body.password, (err, new_user) => {
@@ -83,7 +83,7 @@ transport.sendMail(mailOptions, function(error, info) {
       userId: req.body.userId,
       email: req.body.email,
       name: req.body.name,
-      photo_URL: req.body.photoURL,
+      // photo_URL: req.body.photoURL,
       verify: false
     },req.body.password, (err, new_user) => {
       if(err){

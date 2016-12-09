@@ -35,6 +35,27 @@ const URL = 'http://localhost:8080'
 /*                     Testing                       */
 /* ================================================ */
 
+
+before('should delete all users from database', (done) => {
+  Users
+    .destroy({
+      where: {}
+    })
+    .then((data) => {
+      done()
+    })
+})
+
+after('should delete all users from database', (done) => {
+  Users
+    .destroy({
+      where: {}
+    })
+    .then((data) => {
+      done()
+    })
+})
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test model database users
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -48,7 +69,7 @@ describe('Register new user', () => {
       userId: 1,
       name: "Ken Duigraha Putra",
       email: "kenduigraha@yahoo.com",
-      photo_URL: 'test_photo.png',
+      // photo_URL: 'test_photo.png',
       verify: false
     },'123', (err, new_user) => {
       expect(new_user.dataValues).to.be.an('object')
@@ -63,7 +84,7 @@ describe('Register new user', () => {
       new_user.userId.should.equal(1)
       new_user.name.should.equal("Ken Duigraha Putra")
       new_user.email.should.equal("kenduigraha@yahoo.com")
-      new_user.photo_URL.should.equal("test_photo.png")
+      // new_user.photo_URL.should.equal("test_photo.png")
       new_user.verify.should.equal(false)
 
       done()
@@ -97,7 +118,7 @@ describe('Get one user', () => {
 
             one_user.userId.should.equal(all_users[0].userId)
             one_user.email.should.equal(all_users[0].email)
-            one_user.photo_URL.should.equal(all_users[0].photo_URL)
+            // one_user.photo_URL.should.equal(all_users[0].photo_URL)
             one_user.verify.should.equal(all_users[0].verify)
 
             done()
@@ -237,7 +258,7 @@ describe('Register new user using API End Point', () => {
       name: "Ken Duigraha Putra",
       email: "kenduigraha@yahoo.com",
       password: "password",
-      photo_URL: 'test_photo.png'
+      // photo_URL: 'test_photo.png'
     }
     chai.request(URL)
       .post('/api/auth/test/signup')
@@ -258,7 +279,7 @@ describe('Register new user using API End Point', () => {
         res.body.userId.should.equal(new_user.userId)
         res.body.name.should.equal(new_user.name)
         res.body.email.should.equal(new_user.email)
-        res.body.photo_URL.should.equal(new_user.photo_URL)
+        // res.body.photo_URL.should.equal(new_user.photo_URL)
         res.body.verify.should.equal(false)
 
         done()
@@ -303,7 +324,7 @@ describe('Email verification user', () => {
             res.body.userId.should.equal(all_users[0].userId)
             res.body.name.should.equal(all_users[0].name)
             res.body.email.should.equal(all_users[0].email)
-            res.body.photo_URL.should.equal(all_users[0].photo_URL)
+            // res.body.photo_URL.should.equal(all_users[0].photo_URL)
             res.body.verify.should.equal(true)
 
             done()
@@ -373,7 +394,7 @@ describe('Submit form email in forgot password', () => {
             res.body.userId.should.equal(all_users[0].userId)
             res.body.name.should.equal(all_users[0].name)
             res.body.email.should.equal(all_users[0].email)
-            res.body.photo_URL.should.equal(all_users[0].photo_URL)
+            // res.body.photo_URL.should.equal(all_users[0].photo_URL)
             res.body.verify.should.equal(all_users[0].verify)
 
             done()
@@ -418,7 +439,7 @@ describe('User verification from their email', () => {
             res.body.userId.should.equal(all_users[0].userId)
             res.body.name.should.equal(all_users[0].name)
             res.body.email.should.equal(all_users[0].email)
-            res.body.photo_URL.should.equal(all_users[0].photo_URL)
+            // res.body.photo_URL.should.equal(all_users[0].photo_URL)
             res.body.verify.should.equal(all_users[0].verify)
 
             done()
@@ -459,7 +480,7 @@ describe('Submit form new password', () => {
             res.body.userId.should.equal(all_users[0].userId)
             res.body.name.should.equal(all_users[0].name)
             res.body.email.should.equal(all_users[0].email)
-            res.body.photo_URL.should.equal(all_users[0].photo_URL)
+            // res.body.photo_URL.should.equal(all_users[0].photo_URL)
             res.body.verify.should.equal(all_users[0].verify)
 
             done()
@@ -468,6 +489,87 @@ describe('Submit form new password', () => {
   })
 })
 
+/*
+  * end point : /api/users/:id
+  * method : GET
+*/
+describe('Get a user', () => {
+  it('should show one user\'s data', (done) => {
+    Users
+      .findAll()
+      .then((all_users) => {
+        chai
+          .request(URL)
+          .get('/api/users/'+all_users[0].id)
+          .end((err, res) => {
+            res.should.be.json
+            res.should.have.status(200)
+
+            expect(res.body).to.be.an('object')
+            expect(res.body).to.have.ownProperty('userId')
+            expect(res.body).to.have.ownProperty('myhash')
+            expect(res.body).to.have.ownProperty('mysalt')
+            expect(res.body).to.have.ownProperty('email')
+            expect(res.body).to.have.ownProperty('name')
+            expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('verify')
+
+            res.body.userId.should.equal(all_users[0].userId)
+            res.body.name.should.equal(all_users[0].name)
+            res.body.email.should.equal(all_users[0].email)
+            // res.body.photo_URL.should.equal(all_users[0].photo_URL)
+            res.body.verify.should.equal(all_users[0].verify)
+
+            done()
+          })
+      })
+  })
+})
+
+/*
+  * end point : /api/users/:id
+  * method : PUT
+*/
+describe('Edit a user', () => {
+  it('should edit user\'s data', (done) => {
+    Users
+      .findAll()
+      .then((all_users) => {
+        var edit_data = {
+          email: "new_email@yahoo.com",
+          photo_URL: "new_photo.png"
+        }
+        chai
+          .request(URL)
+          .put('/api/users/'+all_users[0].id)
+          .send({
+            email: edit_data.email,
+            photo_URL: edit_data.photo_URL
+          })
+          .end((err, res) => {
+            res.should.be.json
+            res.should.have.status(200)
+
+            expect(res.body).to.be.an('object')
+            expect(res.body).to.have.ownProperty('userId')
+            expect(res.body).to.have.ownProperty('myhash')
+            expect(res.body).to.have.ownProperty('mysalt')
+            expect(res.body).to.have.ownProperty('email')
+            expect(res.body).to.have.ownProperty('name')
+            expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('verify')
+
+            res.body.userId.should.equal(all_users[0].userId)
+            res.body.name.should.equal(all_users[0].name)
+            res.body.email.should.equal(edit_data.email)
+            res.body.photo_URL.should.equal(edit_data.photo_URL)
+            res.body.verify.should.equal(true)
+
+            done()
+          })
+      })
+  })
+})
 /*
   * end point : /api/users/:id
   * method : DELETE
@@ -490,24 +592,4 @@ describe('Delete a user', () => {
           })
       })
   })
-})
-
-before('should delete all users from database', (done) => {
-  Users
-    .destroy({
-      where: {}
-    })
-    .then((data) => {
-      done()
-    })
-})
-
-after('should delete all users from database', (done) => {
-  Users
-    .destroy({
-      where: {}
-    })
-    .then((data) => {
-      done()
-    })
 })

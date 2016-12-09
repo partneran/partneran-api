@@ -55,8 +55,8 @@ let editOneUser = (req, res) => {
         res.json(err)
       }else{
         var new_data = {
-          email: "test_new_update@gmail.com",
-          photo_URL: "new_test_photo.png",
+          email: req.body.email,
+          photo_URL: req.body.photo_URL,
           verify: true
         }
 
