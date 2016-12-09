@@ -23,6 +23,7 @@ dotenv.load()
 */
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
+const decode = require('jwt-decode')
 
 /*
   * Models
@@ -33,7 +34,7 @@ const Users = models.Users
 /*
   * URL
 */
-const URL = 'http://localhost:8080/'
+const URL = 'http://localhost:8080'
 
 /* ================================================ */
 /*                     Testing                       */
@@ -45,7 +46,6 @@ const URL = 'http://localhost:8080/'
 
 /*
   * test create a user
-  * end point : /api/auth/signup
 */
 describe('Register new user', () => {
   it('should create new user in database with hardcode data', (done) => {
@@ -126,44 +126,37 @@ describe('Get one user', () => {
 })
 
 /*
-  * test update a user
+  * test edit a user
   * end point : /api/users/:id
 */
-describe('Update one user', () => {
+describe.only('Edit one user', () => {
   it('should update one user\'s data', (done) => {
     Users
       .findAll()
       .then((all_users) => {
 
         Users
-          .update({
-              email: "test_new_update@gmail.com",
-              photo_URL: "new_test_photo.png",
-              verify: true
-          }, {
+          .findOne({
               where: {
                 id: all_users[0].id
               }
           })
           .then((one_data, err) => {
             if(err){
-              console.log(err);
+              console.log("err", err);
               done()
             }else{
-              // console.log(one_data);
-              // var new_data = {
-              //   email: "test_new_update@gmail.com",
-              //   password: one_data.generateHash("new_password"),
-              //   photo_URL: "new_test_photo.png",
-              //   verify: true
-              // }
-              //
-              // one_data.email= new_data.email
-              // one_data.password= new_data.password
-              // one_data.photo_URL= new_data.photo_URL
-              // one_data.verify= new_data.verify
-              // one_data.save()
+              var new_data = {
+                email: "test_new_update@gmail.com",
+                photo_URL: "new_test_photo.png",
+                verify: true
+              }
 
+              one_data.email= new_data.email
+              one_data.password= new_data.password
+              one_data.photo_URL= new_data.photo_URL
+              one_data.verify= new_data.verify
+              one_data.save()
 
               expect(one_data.dataValues).to.be.an('object')
               expect(one_data.dataValues).to.have.ownProperty('userId')
@@ -204,12 +197,25 @@ describe('Change Password', () => {
               // console.log(data);
 
             Users
-              .resetPassword(all_users[0].email, "test_new", data.key, (err, user_new_password) => {
+              .resetPassword(all_users[0].email, "test_new_password", data.key, (err, user_new_password) => {
                 if(err){
                   console.log("error",err);
                   done()
                 }else{
-                  console.log(user_new_password);
+                  // console.log(user_new_password.dataValues);
+
+                  expect(user_new_password.dataValues).to.be.an('object')
+                  expect(user_new_password.dataValues).to.have.ownProperty('userId')
+                  expect(user_new_password.dataValues).to.have.ownProperty('myhash')
+                  expect(user_new_password.dataValues).to.have.ownProperty('mysalt')
+                  expect(user_new_password.dataValues).to.have.ownProperty('email')
+                  expect(user_new_password.dataValues).to.have.ownProperty('photo_URL')
+                  expect(user_new_password.dataValues).to.have.ownProperty('verify')
+
+                  user_new_password.userId.should.equal(all_users[0].userId)
+                  user_new_password.email.should.equal(all_users[0].email)
+                  user_new_password.photo_URL.should.equal(all_users[0].photo_URL)
+                  user_new_password.verify.should.equal(all_users[0].verify)
 
                   done()
                 }
@@ -260,7 +266,7 @@ describe('Delete one user', () => {
 //  test end point user
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 /*
-  * register a user
+  * testing signup a user
   * method : POST
   * End Point : /api/auth/signup
 */
@@ -293,7 +299,33 @@ describe('Register new user using API End Point', () => {
 })
 
 /*
-  * login a user
+  * testing email verification email a user
+  * method : POST
+  * End Point : /api/auth/verification/:token
+*/
+describe('Email verification user', () => {
+  it('should get a new registered user\'s token', (done) => {
+    chai
+      .request(URL)
+      .get('/api/auth/verification')
+      .end((err, res) => {
+        if(err){
+          console.log(err);
+          done()
+        }else{
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty('token')
+          done()
+        }
+      })
+  })
+})
+
+/*
+  * testing login a user
   * End Point : /api/auth/login
 */
 describe('Login a user', () => {
@@ -323,7 +355,80 @@ describe('Login a user', () => {
   })
 })
 
+/*
+  * testing forgot password, user submit email
+  * End Point : /api/users/forgot
+*/
+describe('Submit form email in forgot password', () => {
+  it('should get forgoten data users by email', (done) => {
+    chai
+      .request(URL)
+      .get('/api/users/forgot')
+      .end((err, res) => {
+        if(err){
+          console.log(err);
+          done()
+        }else{
+          res.should.be.json
+          res.should.have.status(200)
 
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty('token')
+          done()
+        }
+      })
+  })
+})
+
+/*
+  * testing forgot password, user click email verification
+  * End Point : /api/auth/verification/forgot/:token
+*/
+describe('User verification from their email', () => {
+  it('should get forgoten data user\'s token', (done) => {
+    chai
+      .request(URL)
+      .get('/api/auth/verification/forgot/')
+      .end((err, res) => {
+        if(err){
+          console.log(err);
+          done()
+        }else{
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty('token')
+          done()
+        }
+      })
+  })
+})
+
+/*
+  * testing forgot password, user submit email
+  * End Point : /api/users/password
+*/
+describe('Submit form new password', () => {
+  it('should update password & get data user', (done) => {
+    chai
+      .request(URL)
+      .get('/api/users/forgot')
+      .end((err, res) => {
+        if(err){
+          console.log(err);
+          done()
+        }else{
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty('token')
+          done()
+        }
+      })
+  })
+})
 
 /*
 

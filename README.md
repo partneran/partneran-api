@@ -109,18 +109,23 @@ Default development port and host : http://localhost:3000/
 #### Users
 | Routes | HTTP | Description |
 |--------|------|-------------|
+| /api/users/:id | GET | get a user |
 | /api/users/:id | PUT  | edit a user |
 | /api/users/:id | DELETE | delete a user |
-| /api/users/forgot | POST | forgot `password |
-| /api/users/password | POST | new password |
+| /api/users/forgot | POST | forgot password, user submit their email |
+| /api/users/password | POST | new password, user submit their new password |
 
 #### Auth
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/auth/login | POST | login a user |
 | /api/auth/signup | POST | process signup a user |
-| /api/auth/login/:token | GET | process email verification a user & login |
-| /api/auth/forgot/:token | GET | process forgot password email verification & login |
+
+#### Verification
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/auth/verification/:token | GET | process email verification new registered user & login when user click link in their email |
+| /api/auth/verification/forgot/:token | GET | show form new password email verification & login when users click link in their email |
 
 #### Ideas
 | Routes | HTTP | Description |
