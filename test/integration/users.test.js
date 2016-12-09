@@ -30,6 +30,11 @@ const passport = require('passport')
 const models = require ('../../models')
 const Users = models.Users
 
+/*
+  * URL
+*/
+const URL = 'http://localhost:8080/'
+
 /* ================================================ */
 /*                     Testing                       */
 /* ================================================ */
@@ -131,26 +136,34 @@ describe('Update one user', () => {
       .then((all_users) => {
 
         Users
-          .findOne({
-            where: {
-              id: all_users[0].id
-            }
+          .update({
+              email: "test_new_update@gmail.com",
+              photo_URL: "new_test_photo.png",
+              verify: true
+          }, {
+              where: {
+                id: all_users[0].id
+              }
           })
           .then((one_data, err) => {
             if(err){
               console.log(err);
               done()
             }else{
-              var new_data = {
-                email: "kendui94@gmail.com",
-                photo_URL: "new_test_photo.png",
-                verify: true
-              }
+              // console.log(one_data);
+              // var new_data = {
+              //   email: "test_new_update@gmail.com",
+              //   password: one_data.generateHash("new_password"),
+              //   photo_URL: "new_test_photo.png",
+              //   verify: true
+              // }
+              //
+              // one_data.email= new_data.email
+              // one_data.password= new_data.password
+              // one_data.photo_URL= new_data.photo_URL
+              // one_data.verify= new_data.verify
+              // one_data.save()
 
-              one_data.email= new_data.email
-              one_data.photo_URL= new_data.photo_URL
-              one_data.verify= new_data.verify
-              one_data.save()
 
               expect(one_data.dataValues).to.be.an('object')
               expect(one_data.dataValues).to.have.ownProperty('userId')
@@ -166,6 +179,41 @@ describe('Update one user', () => {
               one_data.verify.should.equal(new_data.verify)
 
               done()
+            }
+          })
+
+      })
+  })
+})
+
+/*
+  * test change a user's password
+  * end point : /api/auth/forgot/:token
+*/
+describe('Change Password', () => {
+  it('should change one user\'s password', (done) => {
+    Users
+      .findAll()
+      .then((all_users) => {
+        Users
+          .setResetPasswordKey(all_users[0].email, (err, data) => {
+            if(err){
+              console.log(err);
+              done()
+            }else{
+              // console.log(data);
+
+            Users
+              .resetPassword(all_users[0].email, "test_new", data.key, (err, user_new_password) => {
+                if(err){
+                  console.log("error",err);
+                  done()
+                }else{
+                  console.log(user_new_password);
+
+                  done()
+                }
+              })
             }
           })
 
@@ -211,53 +259,67 @@ describe('Delete one user', () => {
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test end point user
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 /*
-  * End Point : /api/users/login
+  * register a user
+  * method : POST
+  * End Point : /api/auth/signup
 */
-describe.skip('Login a user', () => {
-  it('should login a user and generate token with user\'s information',(done) => {
-    passport.authenticate('local', {}, (err, user, info) => {
-      if(err){
-        // return res.status(400).json(err)
-        done()
-      }else{
-        if(user != false){
-          // console.log(user);
-          var token = {
-            token: jwt.sign({
-              sub: user.userId,
-              email: user.email,
-              photo_URL: user.photo_URL,
-              verify: user.verify
-            }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
-          }
-
+describe('Register new user using API End Point', () => {
+  it('should register a user, generate token with user\'s information and send email verification',(done) => {
+    var new_user = {
+      email: "email_testing@yahoo.com",
+      password: "password",
+      photo_URL: 'test_photo.png'
+    }
+    chai
+      .request(URL)
+      .post('/api/auth/signup')
+      .send(new_user)
+      .end((err, res) => {
+        if(err){
+          // console.log(err)
+          done()
+        }else{
           res.should.be.json
           res.should.have.status(200)
 
-          expect(new_user).to.be.an('object')
-          expect(new_user).to.have.ownProperty('userId')
-          expect(new_user).to.have.ownProperty('myhash')
-          expect(new_user).to.have.ownProperty('mysalt')
-          expect(new_user).to.have.ownProperty('email')
-          expect(new_user).to.have.ownProperty('photo_URL')
-          expect(new_user).to.have.ownProperty('verify')
-
-          new_user.userId.should.equal(1)
-          new_user.email.should.equal("kenduigraha@yahoo.com")
-          new_user.photo_URL.should.equal("test_photo.png")
-          new_user.verify.should.equal(false)
-
-          done()
-          // return res.status(200).json()
-        }else{
-          // return res.status(400).json(info)
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty('token')
 
           done()
         }
-      }
-    })
+      })
+  })
+})
+
+/*
+  * login a user
+  * End Point : /api/auth/login
+*/
+describe('Login a user', () => {
+  it('should login a user, generate token with user\'s information',(done) => {
+    var login_user = {
+      email: "email_testing@yahoo.com",
+      password: "password"
+    }
+    chai
+      .request(URL)
+      .post('/api/auth/login')
+      .send(login_user)
+      .end((err, res) => {
+        if(err){
+          // console.log(err)
+          done()
+        }else{
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty('token')
+
+          done()
+        }
+      })
   })
 })
 
@@ -265,7 +327,8 @@ describe.skip('Login a user', () => {
 
 /*
 
-buat controller regis uservar token = jwt.sign({
+buat controller regis user
+var token = jwt.sign({
               userId: 1,
               email: "kenduigraha@yahoo.com",
               photo_URL: 'test_photo.png',
