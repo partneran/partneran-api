@@ -8,6 +8,8 @@ const app = express()
   * ROUTES
 */
 const routeUsers = require('./routes/routes.api.users')
+const routeAuth = require('./routes/routes.api.auth')
+
 /*
   * Models
 */
@@ -30,10 +32,25 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use('/api/users', routeUsers)
+app.use('/api/auth', routeAuth)
+
+// passport.use(new LocalStrategy(Users.authenticate()))
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  }, function (username, password, cb) {
+      Users.findByUsername(username, function (err, user) {
+          if (err) { return cb(err); }
+
+          if (user) {
+              return user.authenticate(password, cb);
+          } else {
+              return cb(null, false, { message: 'Incorrect password' });
+          }
+      });
+  }))
 
 app.use(passport.initialize());
-
-passport.use(new LocalStrategy(Users.authenticate()))
 passport.serializeUser(Users.serializeUser());
 passport.deserializeUser(Users.deserializeUser());
 
