@@ -39,9 +39,10 @@ const Users = models.Users
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 /*
+  * test create a user
   * end point : /api/auth/signup
 */
-describe.skip('Register new user', () => {
+describe('Register new user', () => {
   it('should create new user in database with hardcode data', (done) => {
     Users.register({
       userId: 1,
@@ -49,18 +50,12 @@ describe.skip('Register new user', () => {
       photo_URL: 'test_photo.png',
       verify: false
     },'123', (err, new_user) => {
-
       if(err){
         console.log(err);
         // res.status(400).json(err)
-        expect(err).to.be.an('error')
+        // expect(err).to.throw('error')
         done()
       }else {
-        // console.log(new_user.dataValues);
-        // res.json(new_user)
-        res.should.be.json
-        res.should.have.status(200)
-
         expect(new_user).to.be.an('object')
         expect(new_user).to.have.ownProperty('userId')
         expect(new_user).to.have.ownProperty('myhash')
@@ -79,6 +74,139 @@ describe.skip('Register new user', () => {
     })
   })
 })
+
+/*
+  * test get a user
+  * end point : /api/users/:id
+*/
+describe('Get one user', () => {
+  it('should show one user\'s data', (done) => {
+    Users
+      .findAll()
+      .then((all_users, err) => {
+        if(err){
+          console.log(err)
+          done()
+        }else{
+          Users
+            .findOne({
+              where: {
+                id: all_users[0].id
+              }
+            })
+            .then((one_user, err) => {
+              if(err){
+                console.log(err)
+                done()
+              }else{
+                expect(one_user.dataValues).to.be.an('object')
+                expect(one_user.dataValues).to.have.ownProperty('userId')
+                expect(one_user.dataValues).to.have.ownProperty('myhash')
+                expect(one_user.dataValues).to.have.ownProperty('mysalt')
+                expect(one_user.dataValues).to.have.ownProperty('email')
+                expect(one_user.dataValues).to.have.ownProperty('photo_URL')
+                expect(one_user.dataValues).to.have.ownProperty('verify')
+
+                one_user.userId.should.equal(all_users[0].userId)
+                one_user.email.should.equal(all_users[0].email)
+                one_user.photo_URL.should.equal(all_users[0].photo_URL)
+                one_user.verify.should.equal(all_users[0].verify)
+
+                done()
+              }
+            })
+        }
+      })
+  })
+})
+
+/*
+  * test update a user
+  * end point : /api/users/:id
+*/
+describe('Update one user', () => {
+  it('should update one user\'s data', (done) => {
+    Users
+      .findAll()
+      .then((all_users) => {
+
+        Users
+          .findOne({
+            where: {
+              id: all_users[0].id
+            }
+          })
+          .then((one_data, err) => {
+            if(err){
+              console.log(err);
+              done()
+            }else{
+              var new_data = {
+                email: "kendui94@gmail.com",
+                photo_URL: "new_test_photo.png",
+                verify: true
+              }
+
+              one_data.email= new_data.email
+              one_data.photo_URL= new_data.photo_URL
+              one_data.verify= new_data.verify
+              one_data.save()
+
+              expect(one_data.dataValues).to.be.an('object')
+              expect(one_data.dataValues).to.have.ownProperty('userId')
+              expect(one_data.dataValues).to.have.ownProperty('myhash')
+              expect(one_data.dataValues).to.have.ownProperty('mysalt')
+              expect(one_data.dataValues).to.have.ownProperty('email')
+              expect(one_data.dataValues).to.have.ownProperty('photo_URL')
+              expect(one_data.dataValues).to.have.ownProperty('verify')
+
+              one_data.userId.should.equal(all_users[0].userId)
+              one_data.email.should.equal(new_data.email)
+              one_data.photo_URL.should.equal(new_data.photo_URL)
+              one_data.verify.should.equal(new_data.verify)
+
+              done()
+            }
+          })
+
+      })
+  })
+})
+
+/*
+  * test delete a user
+  * end point : /api/users/:id
+*/
+describe('Delete one user', () => {
+  it('should delete one user', (done) => {
+    Users
+      .findAll()
+      .then((all_users, err) => {
+        if(err){
+          console.log(err)
+          done()
+        }else{
+          Users
+            .destroy({
+              where: {
+                id: all_users[0].id
+              }
+            })
+            .then((deleted_data, err) => {
+              if(err){
+                console.log(err)
+                done()
+              }else{
+                expect(deleted_data).to.be.equal(1)
+
+                done()
+              }
+            })
+        }
+      })
+  })
+})
+
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test end point user
