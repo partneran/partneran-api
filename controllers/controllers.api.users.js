@@ -18,6 +18,22 @@ const nodemailer = require('nodemailer')
 const smtpTransport = require('nodemailer-smtp-transport');
 
 /*
+  * upload photo using multer
+*/
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+      callback(null, `public/photos`)
+  },
+  filename: function (req, file, callback) {
+      callback(null, `${Date.now()}-${file.originalname}`)
+  }
+})
+
+const upload = multer({ storage: storage }).single('photo_URL')
+
+/*
   * end point : /api/users/:id
   * method : GET
 */
@@ -39,10 +55,10 @@ let getOneUser = (req, res) => {
 }
 
 /*
-  * end point : /api/users/:id
+  * end point : /api/users/testedit/:id
   * method : PUT
 */
-let editOneUser = (req, res) => {
+let testingEditOneUser = (req, res) => {
   Users
     .findOne({
         where: {
@@ -55,18 +71,63 @@ let editOneUser = (req, res) => {
         res.json(err)
       }else{
         var new_data = {
+          name: req.body.name,
           email: req.body.email,
           photo_URL: req.body.photo_URL,
-          verify: true
+          short_bio: req.body.short_bio
         }
 
-        one_data.email= new_data.email
-        one_data.password= new_data.password
-        one_data.photo_URL= new_data.photo_URL
-        one_data.verify= new_data.verify
+        one_data.name = new_data.name
+        one_data.email = new_data.email
+        one_data.photo_URL = new_data.photo_URL
+        one_data.short_bio = new_data.short_bio
         one_data.save()
 
         res.json(one_data)
+      }
+    })
+}
+
+/*
+  * end point : /api/users/:id
+  * method : PUT
+  * add field photo_URL & short_bio, edit name, email
+*/
+let editOneUser = (req, res) => {
+  upload(req, res, function (err) {
+      if (err) {
+        console.log(err);
+        return res.json('Error uploading file!', err)
+      }else if (req.file.filename) {
+        Users
+          .findOne({
+              where: {
+                id: req.params.id
+              }
+          })
+          .then((one_data, err) => {
+            if(err){
+              console.log("err", err);
+              res.json(err)
+            }else{
+              var new_data = {
+                name: req.body.name,
+                email: req.body.email,
+                photo_URL: req.file.filename,
+                short_bio: req.body.short_bio
+              }
+
+              one_data.name = new_data.name
+              one_data.email = new_data.email
+              one_data.photo_URL = new_data.photo_URL
+              one_data.short_bio = new_data.short_bio
+              one_data.save()
+
+              res.json(one_data)
+            }
+          })
+      }else {
+        res.json('Error no file!', err)
       }
     })
 }
@@ -202,5 +263,6 @@ module.exports = {
   submitEmailForgotPassword,
   submitNewPasswordForgotPassword,
   testSubmitNewPasswordForgotPassword,
-  deleteOneUser
+  deleteOneUser,
+  testingEditOneUser
 }

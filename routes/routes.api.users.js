@@ -10,6 +10,6 @@ router.post('/forgot', controller.submitEmailForgotPassword)
 router.post('/password', controller.submitNewPasswordForgotPassword)
 router.post('/test/forgot', controller.testSubmitNewPasswordForgotPassword)
 router.delete('/:id', controller.deleteOneUser)
-
+router.put('/testedit/:id', controller.testingEditOneUser)
 
 module.exports = router;

@@ -36,25 +36,25 @@ const URL = 'http://localhost:8080'
 /* ================================================ */
 
 
-// before('should delete all users from database', (done) => {
-//   Users
-//     .destroy({
-//       where: {}
-//     })
-//     .then((data) => {
-//       done()
-//     })
-// })
-//
-// after('should delete all users from database', (done) => {
-//   Users
-//     .destroy({
-//       where: {}
-//     })
-//     .then((data) => {
-//       done()
-//     })
-// })
+before('should delete all users from database', (done) => {
+  Users
+    .destroy({
+      where: {}
+    })
+    .then((data) => {
+      done()
+    })
+})
+
+after('should delete all users from database', (done) => {
+  Users
+    .destroy({
+      where: {}
+    })
+    .then((data) => {
+      done()
+    })
+})
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test model database users
@@ -79,6 +79,7 @@ describe('Register new user', () => {
       expect(new_user.dataValues).to.have.ownProperty('email')
       expect(new_user.dataValues).to.have.ownProperty('name')
       expect(new_user.dataValues).to.have.ownProperty('photo_URL')
+      expect(new_user.dataValues).to.have.ownProperty('short_bio')
       expect(new_user.dataValues).to.have.ownProperty('verify')
 
       new_user.userId.should.equal(1)
@@ -114,6 +115,7 @@ describe('Get one user', () => {
             expect(one_user.dataValues).to.have.ownProperty('mysalt')
             expect(one_user.dataValues).to.have.ownProperty('email')
             expect(one_user.dataValues).to.have.ownProperty('photo_URL')
+            expect(one_user.dataValues).to.have.ownProperty('short_bio')
             expect(one_user.dataValues).to.have.ownProperty('verify')
 
             one_user.userId.should.equal(all_users[0].userId)
@@ -165,6 +167,7 @@ describe('Edit one user', () => {
             expect(one_data.dataValues).to.have.ownProperty('mysalt')
             expect(one_data.dataValues).to.have.ownProperty('email')
             expect(one_data.dataValues).to.have.ownProperty('photo_URL')
+            expect(one_data.dataValues).to.have.ownProperty('short_bio')
             expect(one_data.dataValues).to.have.ownProperty('verify')
 
             one_data.userId.should.equal(all_users[0].userId)
@@ -199,11 +202,14 @@ describe('Change Password', () => {
                 expect(user_new_password.dataValues).to.have.ownProperty('mysalt')
                 expect(user_new_password.dataValues).to.have.ownProperty('email')
                 expect(user_new_password.dataValues).to.have.ownProperty('photo_URL')
+                expect(user_new_password.dataValues).to.have.ownProperty('short_bio')
                 expect(user_new_password.dataValues).to.have.ownProperty('verify')
 
                 user_new_password.userId.should.equal(all_users[0].userId)
+                user_new_password.name.should.equal(all_users[0].name)
                 user_new_password.email.should.equal(all_users[0].email)
                 user_new_password.photo_URL.should.equal(all_users[0].photo_URL)
+                user_new_password.short_bio.should.equal(all_users[0].short_bio)
                 user_new_password.verify.should.equal(all_users[0].verify)
 
                 done()
@@ -279,6 +285,7 @@ describe('Register new user using API End Point', () => {
         expect(res.body).to.have.ownProperty('email')
         expect(res.body).to.have.ownProperty('name')
         expect(res.body).to.have.ownProperty('photo_URL')
+        expect(res.body).to.have.ownProperty('short_bio')
         expect(res.body).to.have.ownProperty('verify')
 
         res.body.userId.should.equal(new_user.userId)
@@ -324,6 +331,7 @@ describe('Email verification user', () => {
             expect(res.body).to.have.ownProperty('email')
             expect(res.body).to.have.ownProperty('name')
             expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('short_bio')
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
@@ -394,6 +402,7 @@ describe('Submit form email in forgot password', () => {
             expect(res.body).to.have.ownProperty('email')
             expect(res.body).to.have.ownProperty('name')
             expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('short_bio')
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
@@ -439,6 +448,7 @@ describe('User verification from their email', () => {
             expect(res.body).to.have.ownProperty('email')
             expect(res.body).to.have.ownProperty('name')
             expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('short_bio')
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
@@ -480,6 +490,7 @@ describe('Submit form new password', () => {
             expect(res.body).to.have.ownProperty('email')
             expect(res.body).to.have.ownProperty('name')
             expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('short_bio')
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
@@ -517,6 +528,7 @@ describe('Get a user', () => {
             expect(res.body).to.have.ownProperty('email')
             expect(res.body).to.have.ownProperty('name')
             expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('short_bio')
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
@@ -535,7 +547,7 @@ describe('Get a user', () => {
   * end point : /api/users/:id
   * method : PUT
 */
-describe.only('Edit a user', () => {
+describe('Edit a user', () => {
   it('should edit user\'s data', (done) => {
     Users
       .findAll()
@@ -550,11 +562,10 @@ describe.only('Edit a user', () => {
 
         chai
           .request(URL)
-          .put('/api/users/'+all_users[0].id)
+          .put('/api/users/testedit/'+all_users[0].id)
           .send({
             name: edit_data.name,
             email: edit_data.email,
-            password: edit_data.password,
             photo_URL: edit_data.photo_URL,
             short_bio: edit_data.short_bio
           })
@@ -573,12 +584,11 @@ describe.only('Edit a user', () => {
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
-            res.body.name.should.equal(all_users[0].name)
             res.body.name.should.equal(edit_data.name)
             res.body.email.should.equal(edit_data.email)
             res.body.photo_URL.should.equal(edit_data.photo_URL)
             res.body.short_bio.should.equal(edit_data.short_bio)
-            res.body.verify.should.equal(true)
+            res.body.verify.should.equal(all_users[0].verify)
 
             done()
           })
