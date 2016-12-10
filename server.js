@@ -79,5 +79,9 @@ db_partneran_dev
 
 sequelize migration:create --name add_short_bio_to_users_table
 
+sequelize model:create --name Ideas --attributes "ideaId:integer,title:string,description:string,status:string,image:str
+ing,video:string"
+
+sequelize db:migrate
 
 */
