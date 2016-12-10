@@ -77,4 +77,7 @@ edit users model, config passport-local-sequelize
 testing :
 db_partneran_dev
 
+sequelize migration:create --name add_short_bio_to_users_table
+
+
 */

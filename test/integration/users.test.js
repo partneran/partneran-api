@@ -246,7 +246,7 @@ describe('Delete one user', () => {
   * method : POST
   * End Point : /api/auth/signup
 */
-describe.only('Register new user using API End Point', () => {
+describe('Register new user using API End Point', () => {
   beforeEach('should delete all users from database', (done) => {
     Users
       .destroy({
