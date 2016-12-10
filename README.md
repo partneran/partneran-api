@@ -85,8 +85,7 @@ ideaId: DataTypes.INTEGER(FK)
 ## Category
 ```javascript
 categoryId: DataTypes.INTEGER,
-name: DataTypes.STRING,
-ideaId: DataTypes.INTEGER(FK)
+name: DataTypes.STRING
 ```
 ## Notifications
 ```javascript

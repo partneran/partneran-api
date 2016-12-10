@@ -96,5 +96,4 @@ add FK categoryId to Ideas table
 sequelize migration:create --name add_FK_categoryId_to_Ideas_table
 
 
-
 */
