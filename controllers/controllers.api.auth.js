@@ -71,52 +71,59 @@ let signUpUser = (req, res, next) => {
     html: `<a href="http://localhost:8080/api/auth/verification/${token}" target="_blank"></a>` // html body
   };
 
-transport.sendMail(mailOptions, function(error, info) {
-  if (error) {
-    console.log(error);
-    res.json(error)
-  }
-  else{
-    console.log('Message sent: ' + info.response);
+  if(req.body.password.length > 8){
+    transport.sendMail(mailOptions, function(error, info) {
+        if (error) {
+          console.log(error);
+          res.json(error)
+        }
+        else{
+          console.log('Message sent: ' + info.response);
 
-    Users.register({
-      userId: req.body.userId,
-      email: req.body.email,
-      name: req.body.name,
-      // photo_URL: req.body.photoURL,
-      verify: false
-    },req.body.password, (err, new_user) => {
-      if(err){
-        console.log(err);
-        res.status(400).json(err)
-      }else {
-        // res.json(new_user)
-        passport.authenticate('local', {}, (err, user, info) => {
-          if(err){
-            console.log(`error`);
-            console.log(err);
-            return res.status(400).json(err)
-          }else{
-            if(user != false){
-              // console.log(user);
-              return res.status(200).json({
-                token: jwt.sign({
-                  sub: user.id,
-                  name: user.name,
-                  email: user.email,
-                  photo_URL: user.photo_URL
-                }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
-              })
-            }else{
-              console.log(`info`);
-              return res.status(400).json(info)
+          Users.register({
+            userId: req.body.userId,
+            email: req.body.email,
+            name: req.body.name,
+            // photo_URL: req.body.photoURL,
+            verify: false
+          }, req.body.password, (err, new_user) => {
+            if(err){
+              console.log(err);
+              res.status(400).json(err)
+            }else {
+              // res.json(new_user)
+              passport.authenticate('local', {}, (err, user, info) => {
+                if(err){
+                  console.log(`error`);
+                  console.log(err);
+                  return res.status(400).json(err)
+                }else{
+                  if(user != false){
+                    // console.log(user);
+                    return res.status(200).json({
+                      token: jwt.sign({
+                        sub: user.id,
+                        name: user.name,
+                        email: user.email,
+                        photo_URL: user.photo_URL
+                      }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
+                    })
+                  }else{
+                    console.log(`info`);
+                    return res.status(400).json(info)
+                  }
+                }
+              })(req, res, next)
             }
-          }
-        })(req, res, next)
-      }
+          })
+        }
+      });
+  }else{
+    res.json({
+      message: "Password must be 8 characters or more"
     })
   }
-});
+
 }
 
 /*
