@@ -64,6 +64,7 @@ app.listen(PORT, (err) => {
 /*
 db name : db_partneran_dev
 
+MODULE USERS
 create table users :
 sequelize model:create --name Users --attributes "userId:integer,email:string,myhash:string(1024),mysalt:string,photo_URL:string,verify:boolean"
 
@@ -79,9 +80,13 @@ db_partneran_dev
 
 sequelize migration:create --name add_short_bio_to_users_table
 
+MODULE IDEAS
 sequelize model:create --name Ideas --attributes "ideaId:integer,title:string,description:string,status:string,image:str
 ing,video:string"
 
 sequelize db:migrate
+
+add FK userId
+sequelize migration:create --name add_FK_userId_to_Ideas_table
 
 */
