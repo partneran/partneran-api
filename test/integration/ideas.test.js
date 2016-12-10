@@ -14,8 +14,6 @@ const slug = require('slug')
 */
 const models = require ('../../models')
 const Ideas = models.Ideas
-const Users = models.Users
-const Categories = models.Categories
 
 /*
   * URL
@@ -240,7 +238,7 @@ describe('Testing Module Ideas', () => {
     * method : POST
     * End Point : /api/ideas
   */
-  describe('Create an idea using API End Point', () => {
+  describe.only('Create an idea using API End Point', () => {
     it('should get data from API End Point to create an idea and get new idea', (done) => {
       var new_idea_testing = {
         ideaId: 1,
