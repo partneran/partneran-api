@@ -4,12 +4,23 @@ var passportLocalSequelize = require('passport-local-sequelize')
 module.exports = function(sequelize, DataTypes) {
   var Users = sequelize.define('Users', {
     userId: DataTypes.INTEGER,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true
+      }
+    },
     myhash: DataTypes.STRING(1024),
     mysalt: DataTypes.STRING,
     photo_URL: DataTypes.STRING,
     verify: DataTypes.BOOLEAN,
-    name: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    }
   }, {
     classMethods: {
       associate: function(models) {

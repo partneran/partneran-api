@@ -36,25 +36,25 @@ const URL = 'http://localhost:8080'
 /* ================================================ */
 
 
-before('should delete all users from database', (done) => {
-  Users
-    .destroy({
-      where: {}
-    })
-    .then((data) => {
-      done()
-    })
-})
-
-after('should delete all users from database', (done) => {
-  Users
-    .destroy({
-      where: {}
-    })
-    .then((data) => {
-      done()
-    })
-})
+// before('should delete all users from database', (done) => {
+//   Users
+//     .destroy({
+//       where: {}
+//     })
+//     .then((data) => {
+//       done()
+//     })
+// })
+//
+// after('should delete all users from database', (done) => {
+//   Users
+//     .destroy({
+//       where: {}
+//     })
+//     .then((data) => {
+//       done()
+//     })
+// })
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //  test model database users
@@ -147,13 +147,16 @@ describe('Edit one user', () => {
             var new_data = {
               email: "test_new_update@gmail.com",
               photo_URL: "new_test_photo.png",
+              name: "new name",
+              short_bio: "I've cool idea, let's be my partner",
               verify: true
             }
 
-            one_data.email= new_data.email
-            one_data.password= new_data.password
-            one_data.photo_URL= new_data.photo_URL
-            one_data.verify= new_data.verify
+            one_data.email = new_data.email
+            one_data.photo_URL = new_data.photo_URL
+            one_data.name = new_data.name
+            one_data.short_bio = new_data.short_bio
+            one_data.verify = new_data.verify
             one_data.save()
 
             expect(one_data.dataValues).to.be.an('object')
@@ -167,6 +170,8 @@ describe('Edit one user', () => {
             one_data.userId.should.equal(all_users[0].userId)
             one_data.email.should.equal(new_data.email)
             one_data.photo_URL.should.equal(new_data.photo_URL)
+            one_data.name.should.equal(new_data.name)
+            one_data.short_bio.should.equal(new_data.short_bio)
             one_data.verify.should.equal(new_data.verify)
 
             done()
@@ -241,7 +246,7 @@ describe('Delete one user', () => {
   * method : POST
   * End Point : /api/auth/signup
 */
-describe('Register new user using API End Point', () => {
+describe.only('Register new user using API End Point', () => {
   beforeEach('should delete all users from database', (done) => {
     Users
       .destroy({
@@ -530,21 +535,28 @@ describe('Get a user', () => {
   * end point : /api/users/:id
   * method : PUT
 */
-describe('Edit a user', () => {
+describe.only('Edit a user', () => {
   it('should edit user\'s data', (done) => {
     Users
       .findAll()
       .then((all_users) => {
         var edit_data = {
+          name: "new name",
           email: "new_email@yahoo.com",
-          photo_URL: "new_photo.png"
+          password: "new_password",
+          photo_URL: "new_photo.png",
+          short_bio: "short bio this user"
         }
+
         chai
           .request(URL)
           .put('/api/users/'+all_users[0].id)
           .send({
+            name: edit_data.name,
             email: edit_data.email,
-            photo_URL: edit_data.photo_URL
+            password: edit_data.password,
+            photo_URL: edit_data.photo_URL,
+            short_bio: edit_data.short_bio
           })
           .end((err, res) => {
             res.should.be.json
@@ -557,12 +569,15 @@ describe('Edit a user', () => {
             expect(res.body).to.have.ownProperty('email')
             expect(res.body).to.have.ownProperty('name')
             expect(res.body).to.have.ownProperty('photo_URL')
+            expect(res.body).to.have.ownProperty('short_bio')
             expect(res.body).to.have.ownProperty('verify')
 
             res.body.userId.should.equal(all_users[0].userId)
             res.body.name.should.equal(all_users[0].name)
+            res.body.name.should.equal(edit_data.name)
             res.body.email.should.equal(edit_data.email)
             res.body.photo_URL.should.equal(edit_data.photo_URL)
+            res.body.short_bio.should.equal(edit_data.short_bio)
             res.body.verify.should.equal(true)
 
             done()
