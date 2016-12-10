@@ -135,7 +135,8 @@ Default development port and host : http://localhost:3000/
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/ideas | POST | process new idea |
-| /api/ideas/:ideaid | GET | process show an idea with it's comments |
+| /api/ideas/:ideaid | GET | show an idea with it's comments |
+| /api/ideas/ | GET |  show all ideas with it's comments |
 | /api/ideas/:ideaid | PUT  | edit an idea |
 | /api/ideas/:ideaid | DELETE | delete an idea |
 

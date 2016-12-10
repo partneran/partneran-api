@@ -7,6 +7,8 @@ const expect = chai.expect
 const should = chai.should()
 chai.use(chaiHTTP)
 
+const slug = require('slug')
+
 /*
   * Models
 */
@@ -37,7 +39,8 @@ describe('Testing Module Ideas', () => {
       description: "test description idea",
       status: 'baby',
       image: "test image idea",
-      video: "test image video"
+      video: "test image video",
+      slug: slug("test title idea")
     }
 
     Ideas
@@ -47,7 +50,8 @@ describe('Testing Module Ideas', () => {
         description: new_idea_testing.description,
         status: new_idea_testing.status,
         image: new_idea_testing.image,
-        video: new_idea_testing.video
+        video: new_idea_testing.video,
+        slug: new_idea_testing.slug
       }).then(() => {
         done()
       })
@@ -58,14 +62,6 @@ describe('Testing Module Ideas', () => {
       .destroy({
         where: {}
       })
-    // Users
-    //   .destroy({
-    //     where: {}
-    //   })
-    // Categories
-    //   .destroy({
-    //     where: {}
-    //   })
     done()
   })
 
@@ -212,7 +208,7 @@ describe('Testing Module Ideas', () => {
   })
 
   /*
-    * test create get an idea
+    * test delete an idea
     * end point : /api/ideas/:ideaid
   */
   describe('Delete one idea', () => {
@@ -228,6 +224,211 @@ describe('Testing Module Ideas', () => {
             })
             .then((deleted_idea) => {
               expect(deleted_idea).to.be.equal(1)
+
+              done()
+            })
+        })
+    })
+  })
+
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  //  test end point ideas
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  /*
+    * testing create an idea
+    * method : POST
+    * End Point : /api/ideas
+  */
+  describe('Create an idea using API End Point', () => {
+    it('should get data from API End Point to create an idea and get new idea', (done) => {
+      var new_idea_testing = {
+        ideaId: 1,
+        title: "test title idea",
+        description: "test description idea",
+        status: 'baby',
+        image: "test image idea",
+        video: "test image video"
+      }
+      chai
+        .request(URL)
+        .post('/api/ideas')
+        .send({
+          ideaId: new_idea_testing.ideaId,
+          title: new_idea_testing.title,
+          description: new_idea_testing.description,
+          image: new_idea_testing.image,
+          video: new_idea_testing.video
+        })
+        .end((err, res) => {
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty("ideaId")
+          expect(res.body).to.have.ownProperty("title")
+          expect(res.body).to.have.ownProperty("description")
+          expect(res.body).to.have.ownProperty("status")
+          expect(res.body).to.have.ownProperty("image")
+          expect(res.body).to.have.ownProperty("video")
+          expect(res.body).to.have.ownProperty("userId")
+          expect(res.body).to.have.ownProperty("categoryId")
+
+          res.body.ideaId.should.equal(new_idea_testing.ideaId)
+          res.body.title.should.equal(new_idea_testing.title)
+          res.body.description.should.equal(new_idea_testing.description)
+          res.body.status.should.equal(new_idea_testing.status)
+          res.body.image.should.equal(new_idea_testing.image)
+          res.body.video.should.equal(new_idea_testing.video)
+
+          done()
+        })
+    })
+  })
+
+  /*
+    * testing get an idea
+    * method : GET
+    * End Point : /api/ideas/:slug
+  */
+  describe('Get an idea using API End Point', () => {
+    it('should get one idea data from API End Point', (done) => {
+      Ideas
+        .findAll()
+        .then((all_ideas, err) => {
+          chai
+            .request(URL)
+            .get('/api/ideas/'+all_ideas[0].slug)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body).to.have.ownProperty("ideaId")
+              expect(res.body).to.have.ownProperty("title")
+              expect(res.body).to.have.ownProperty("description")
+              expect(res.body).to.have.ownProperty("status")
+              expect(res.body).to.have.ownProperty("image")
+              expect(res.body).to.have.ownProperty("video")
+              expect(res.body).to.have.ownProperty("userId")
+              expect(res.body).to.have.ownProperty("categoryId")
+
+              res.body.ideaId.should.equal(all_ideas[0].ideaId)
+              res.body.title.should.equal(all_ideas[0].title)
+              res.body.description.should.equal(all_ideas[0].description)
+              res.body.status.should.equal(all_ideas[0].status)
+              res.body.image.should.equal(all_ideas[0].image)
+              res.body.video.should.equal(all_ideas[0].video)
+
+              done()
+            })
+        })
+    })
+  })
+
+  /*
+    * testing get all ideas
+    * method : POST
+    * End Point : /api/ideas
+  */
+  describe('Show all ideas using API End Point', () => {
+    it('should get all ideas data from API End Point', (done) => {
+      chai
+        .request(URL)
+        .get('/api/ideas/')
+        .end((err, res) => {
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('array')
+
+          res.body.map(idea => {
+            expect(idea).to.have.ownProperty("ideaId")
+            expect(idea).to.have.ownProperty("title")
+            expect(idea).to.have.ownProperty("description")
+            expect(idea).to.have.ownProperty("status")
+            expect(idea).to.have.ownProperty("image")
+            expect(idea).to.have.ownProperty("video")
+            expect(idea).to.have.ownProperty("userId")
+            expect(idea).to.have.ownProperty("categoryId")
+          })
+
+          done()
+        })
+    })
+  })
+
+  /*
+    * testing edit an idea
+    * method : PUT
+    * End Point : /api/ideas/:ideaid
+  */
+  describe('Edit an idea using API End Point', () => {
+    it('should send edit data to PUT API End Point to edit an idea', (done) => {
+      var edit_idea = {
+        title: "test edit title idea",
+        description: "test edit description idea",
+        image: "test edit image idea",
+        video: "test edit image video"
+      }
+
+      Ideas
+        .findAll()
+        .then((all_ideas, err) => {
+          chai
+            .request(URL)
+            .put('/api/ideas/'+all_ideas[0].id)
+            .send({
+              title: edit_idea.title,
+              description: edit_idea.description,
+              image: edit_idea.image,
+              video: edit_idea.video
+            })
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body).to.have.ownProperty("ideaId")
+              expect(res.body).to.have.ownProperty("title")
+              expect(res.body).to.have.ownProperty("description")
+              expect(res.body).to.have.ownProperty("status")
+              expect(res.body).to.have.ownProperty("image")
+              expect(res.body).to.have.ownProperty("video")
+              expect(res.body).to.have.ownProperty("userId")
+              expect(res.body).to.have.ownProperty("categoryId")
+
+              res.body.ideaId.should.equal(all_ideas[0].ideaId)
+              res.body.title.should.equal(edit_idea.title)
+              res.body.description.should.equal(edit_idea.description)
+              res.body.status.should.equal(all_ideas[0].status)
+              res.body.image.should.equal(edit_idea.image)
+              res.body.video.should.equal(edit_idea.video)
+
+              done()
+            })
+        })
+    })
+  })
+
+  /*
+    * testing delete an idea
+    * method : DELETE
+    * End Point : /api/ideas/:ideaid
+  */
+  describe('Delete an idea using API End Point', () => {
+    it('should delete an idea through API End Point', (done) => {
+      Ideas
+        .findAll()
+        .then((all_ideas, err) => {
+          chai
+            .request(URL)
+            .delete('/api/ideas/'+all_ideas[0].id)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.equal(1)
 
               done()
             })

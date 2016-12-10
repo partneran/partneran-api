@@ -9,6 +9,7 @@ const app = express()
 */
 const routeUsers = require('./routes/routes.api.users')
 const routeAuth = require('./routes/routes.api.auth')
+const routeIdeas = require('./routes/routes.api.ideas')
 
 /*
   * Models
@@ -33,6 +34,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use('/api/users', routeUsers)
 app.use('/api/auth', routeAuth)
+app.use('/api/ideas', routeIdeas)
 
 // passport.use(new LocalStrategy(Users.authenticate()))
 passport.use(new LocalStrategy({
@@ -95,5 +97,6 @@ sequelize model:create --name Categories --attributes "categoryId:integer,name:s
 add FK categoryId to Ideas table
 sequelize migration:create --name add_FK_categoryId_to_Ideas_table
 
+sequelize migration:create --name add_slug_to_Ideas_table
 
 */
