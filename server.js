@@ -89,4 +89,12 @@ sequelize db:migrate
 add FK userId
 sequelize migration:create --name add_FK_userId_to_Ideas_table
 
+MODULE CATEGORIES
+sequelize model:create --name Categories --attributes "categoryId:integer,name:string"
+
+add FK categoryId to Ideas table
+sequelize migration:create --name add_FK_categoryId_to_Ideas_table
+
+
+
 */
