@@ -19,6 +19,7 @@ server side of partneran
 15. chai
 16. dotenv
 17. chai-http
+18. multer
 
 # Testing
 ## Integration (End Point)
@@ -35,6 +36,7 @@ email: DataTypes.STRING,
 myhash: DataTypes.STRING(1024),
 mysalt: DataTypes.STRING,
 photo_URL: DataTypes.STRING,
+short_bio: DataTypes.STRING,
 verify: DataTypes.BOOLEAN
 ```
 ## Roles
@@ -51,6 +53,8 @@ title: DataTypes.STRING,
 description: DataTypes.STRING,
 status: DataTypes.STRING,
 image: DataTypes.STRING,
+video: DataTypes.STRING,
+userId: DataTypes.INTEGER(FK),
 categoryId: DataTypes.INTEGER(FK)
 ```
 ## Votes
