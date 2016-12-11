@@ -6,7 +6,7 @@ const router = express.Router()
 router.post('/', controller.createNewIdea)
 router.get('/', controller.getAllIdeas)
 router.get('/:slug', controller.getOneIdea)
-router.put('/:id', controller.editOneIdea)
-router.delete('/:id', controller.deleteOneIdea)
+router.put('/:ideaid', controller.editOneIdea)
+router.delete('/:ideaid', controller.deleteOneIdea)
 
 module.exports = router;

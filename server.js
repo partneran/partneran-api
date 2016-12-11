@@ -10,6 +10,7 @@ const app = express()
 const routeUsers = require('./routes/routes.api.users')
 const routeAuth = require('./routes/routes.api.auth')
 const routeIdeas = require('./routes/routes.api.ideas')
+const routeComments = require('./routes/routes.api.comments')
 
 /*
   * Models
@@ -35,6 +36,7 @@ app.use(bodyParser.urlencoded({
 app.use('/api/users', routeUsers)
 app.use('/api/auth', routeAuth)
 app.use('/api/ideas', routeIdeas)
+app.use('/api/ideas', routeComments)
 
 // passport.use(new LocalStrategy(Users.authenticate()))
 passport.use(new LocalStrategy({

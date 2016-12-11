@@ -55,6 +55,10 @@ let getOneIdea = (req, res) => {
     })
 }
 
+/*
+  * method : GET
+  * End Point : /api/ideas/
+*/
 let getAllIdeas = (req, res) => {
   Ideas
     .findAll()
@@ -68,11 +72,15 @@ let getAllIdeas = (req, res) => {
     })
 }
 
+/*
+  * method : PUT
+  * End Point : /api/ideas/:ideaid
+*/
 let editOneIdea = (req, res) => {
   Ideas
     .findOne({
       where: {
-        id: req.params.id
+        id: req.params.ideaid
       }
     })
     .then((new_idea, err) => {
@@ -91,11 +99,15 @@ let editOneIdea = (req, res) => {
     })
 }
 
+/*
+  * method : DELETE
+  * End Point : /api/ideas/:ideaid
+*/
 let deleteOneIdea = (req, res) => {
   Ideas
     .destroy({
       where: {
-        id: req.params.id
+        id: req.params.ideaid
       }
     })
     .then((deleted_idea, err) => {
