@@ -88,7 +88,7 @@ describe('Testing Votes Model', () => {
             expect(votes.dataValues).to.be.an('object')
             expect(votes.dataValues).to.have.ownProperty("voteId")
             expect(votes.dataValues).to.have.ownProperty("votes")
-
+            console.log(votes.count);
             votes.count.should.equal(1)
             votes.voteId.should.equal(all_votes[0].voteId)
             votes.votes.should.equal(all_votes[0].votes)
