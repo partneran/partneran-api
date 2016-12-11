@@ -49,7 +49,7 @@ describe('Testing Votes Model', () => {
     * test create a vote
     * end point : /api/ideas/:ideaid/votes/
   */
-  describe.only('Create one vote', () => {
+  describe('Create one vote', () => {
     it('should create one vote', (done) => {
       Votes
         .create({
@@ -73,7 +73,7 @@ describe('Testing Votes Model', () => {
     * test show a vote with counter
     * end point : /api/ideas/:ideaid/votes/
   */
-  describe.only('Get one vote', () => {
+  describe('Get one vote', () => {
     it('should show one vote', (done) => {
       Votes
       .findAll()
@@ -85,13 +85,14 @@ describe('Testing Votes Model', () => {
             }
           })
           .then((votes) => {
-            expect(votes.dataValues).to.be.an('object')
-            expect(votes.dataValues).to.have.ownProperty("voteId")
-            expect(votes.dataValues).to.have.ownProperty("votes")
-            console.log(votes.count);
+            // console.log(votes.rows[0].dataValues);
+            expect(votes).to.be.an('object')
+            expect(votes.rows[0].dataValues).to.have.ownProperty("voteId")
+            expect(votes.rows[0].dataValues).to.have.ownProperty("votes")
+
             votes.count.should.equal(1)
-            votes.voteId.should.equal(all_votes[0].voteId)
-            votes.votes.should.equal(all_votes[0].votes)
+            votes.rows[0].dataValues.voteId.should.equal(all_votes[0].voteId)
+            votes.rows[0].dataValues.votes.should.equal(all_votes[0].votes)
 
             done()
           })
@@ -103,7 +104,7 @@ describe('Testing Votes Model', () => {
     * test delete a vote
     * end point : /api/ideas/:ideaid/votes/:voteid
   */
-  describe.only('Delete one vote', () => {
+  describe('Delete one vote', () => {
     it('should delete one vote', (done) => {
       Votes
       .findAll()
