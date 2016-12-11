@@ -60,7 +60,7 @@ categoryId: DataTypes.INTEGER(FK)
 ## Votes
 ```javascript
 voteId: DataTypes.INTEGER,
-votes: DataTypes.STRING,
+votes: DataTypes.INTEGER,
 userId: DataTypes.INTEGER(FK),
 ideaId: DataTypes.INTEGER(FK)
 ```
@@ -153,5 +153,5 @@ Default development port and host : http://localhost:3000/
 #### Notifications
 | Routes | HTTP | Description |
 |--------|------|-------------|
-| /api/notif/ | POST | process new notification & passing ideaId & userId |
+| /api/notif/ | POST | process new notification |
 | /api/notif/done | POST | process mark notification as done |
