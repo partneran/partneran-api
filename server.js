@@ -105,4 +105,7 @@ sequelize migration:create --name add_slug_to_Ideas_table
 create table comments :
 sequelize model:create --name Comments --attributes "commentId:integer,content:text"
 
+create table roles :
+sequelize model:create --name Roles --attributes "roleId:integer,roles:string"
+
 */
