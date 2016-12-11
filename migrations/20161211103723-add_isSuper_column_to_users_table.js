@@ -9,8 +9,8 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    return queryInterface.addColumn('Users', 'short_bio', {
-      type : Sequelize.STRING
+    return queryInterface.addColumn('Users', 'isSuper', {
+      type : Sequelize.BOOLEAN
     })
   },
 
@@ -22,6 +22,5 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-    return queryInterface.removeColumn('Users', 'isSuper')
   }
 };

@@ -111,5 +111,6 @@ sequelize model:create --name Roles --attributes "roleId:integer,roles:string"
 create table votes :
 sequelize model:create --name Votes --attributes "voteId:integer,votes:string"
 
+sequelize migration:create --name add_isSuper_column_to_users_table
 
 */
