@@ -48,14 +48,14 @@ describe('Testing Module Comments', () => {
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  //  test model ideas databases
+  //  test model comments databases
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   /*
     * test create a comment
     * end point : /api/ideas/:ideaid/comments/
   */
-  describe.only('Create one comment', () => {
+  describe('Create one comment', () => {
     it('should create one comment', (done) => {
       var new_comment_testing = {
         commentId: 1,
@@ -83,7 +83,7 @@ describe('Testing Module Comments', () => {
     * test show a comment
     * end point : /api/ideas/:ideaid/comments/:commentid
   */
-  describe.only('Get one comment', () => {
+  describe('Get one comment', () => {
     it('should show one comment', (done) => {
       Comments
       .findAll()
@@ -112,7 +112,7 @@ describe('Testing Module Comments', () => {
     * test edit a comment
     * end point : /api/ideas/:ideaid/comments/:commentid
   */
-  describe.only('Edit one comment', () => {
+  describe('Edit one comment', () => {
     it('should edit one comment', (done) => {
       Comments
       .findAll()
@@ -148,7 +148,7 @@ describe('Testing Module Comments', () => {
     * test delete a comment
     * end point : /api/ideas/:ideaid/comments/:commentid
   */
-  describe.only('Delete one comment', () => {
+  describe('Delete one comment', () => {
     it('should delete one comment', (done) => {
       Comments
       .findAll()
@@ -168,4 +168,175 @@ describe('Testing Module Comments', () => {
     })
   })
 
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  //  test end point coments
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  /*
+    * testing create a comment
+    * method : POST
+    * End Point : /api/ideas/:ideaid/comments
+  */
+  describe.only('Create a comment using API End Point', () => {
+    it('should get data from API End Point when create a comment', (done) => {
+      var new_comment_testing = {
+        commentId: 1,
+        content: "testing comment bla bla bla"
+      }
+      var ideaId = 1
+
+      chai
+        .request(URL)
+        .post('/api/ideas/'+ideaId+'/comments')
+        .send({
+          commentId: new_comment_testing.commentId,
+          content: new_comment_testing.content
+        })
+        .end((err, res) => {
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty("commentId")
+          expect(res.body).to.have.ownProperty("content")
+
+          res.body.commentId.should.equal(new_comment_testing.commentId)
+          res.body.content.should.equal(new_comment_testing.content)
+
+          done()
+        })
+    })
+  })
+
+  /*
+    * testing get a comment
+    * method : GET
+    * End Point : /api/ideas/:ideaid/comments/:commentid
+  */
+  describe('Get a comment using API End Point', () => {
+    it('should show a data comment from API End Point', (done) => {
+      Comments
+        .findAll()
+        .then((all_comments, err) => {
+          var ideaId = 1
+
+          chai
+            .request(URL)
+            .get('/api/ideas/'+ideaId+'/comments/'+all_comments[0].id)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body).to.have.ownProperty("commentId")
+              expect(res.body).to.have.ownProperty("content")
+
+              res.body.commentId.should.equal(all_comments[0].commentId)
+              res.body.content.should.equal(all_comments[0].content)
+
+              done()
+            })
+        })
+    })
+  })
+
+  /*
+    * testing get all comments
+    * method : GET
+    * End Point : /api/ideas/:ideaid/comments/
+  */
+  describe('Get all comments using API End Point', () => {
+    it('should show all comments data from API End Point', (done) => {
+      Comments
+        .findAll()
+        .then((all_comments, err) => {
+          var ideaId = 1
+
+          chai
+            .request(URL)
+            .get('/api/ideas/'+ideaId+'/comments/')
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('array')
+              res.body.map(comment => {
+                expect(comment).to.have.ownProperty("commentId")
+                expect(comment).to.have.ownProperty("content")
+              })
+
+              res.body[0].commentId.should.equal(all_comments[0].commentId)
+              res.body[0].content.should.equal(all_comments[0].content)
+
+              done()
+            })
+        })
+    })
+  })
+
+  /*
+    * testing edit a comment
+    * method : PUT
+    * End Point : /api/ideas/:ideaid/comments/:commentid
+  */
+  describe('Edit a comment using API End Point', () => {
+    it('should edit a comment and get data from API End Point', (done) => {
+      var edit_data = {
+        content: "comment edit bla bla bla"
+      }
+
+      Comments
+        .findAll()
+        .then((all_comments, err) => {
+          var ideaId = 1
+
+          chai
+            .request(URL)
+            .put('/api/ideas/'+ideaId+'/comments/'+all_comments[0].id)
+            .send({
+              content: edit_data.content
+            })
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body).to.have.ownProperty("commentId")
+              expect(res.body).to.have.ownProperty("content")
+
+              res.body.commentId.should.equal(all_comments[0].commentId)
+              res.body.content.should.equal(edit_data.content)
+
+              done()
+            })
+        })
+    })
+  })
+
+  /*
+    * testing delete a comment
+    * method : DELETE
+    * End Point : /api/ideas/:ideaid/comments/:commentid
+  */
+  describe('Delete a comment using API End Point', () => {
+    it('should delete a comment and get data from API End Point', (done) => {
+      Comments
+        .findAll()
+        .then((all_comments, err) => {
+          var ideaId = 1
+
+          chai
+            .request(URL)
+            .delete('/api/ideas/'+ideaId+'/comments/'+all_comments[0].id)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.equal(1)
+
+              done()
+            })
+        })
+    })
+  })
 })
