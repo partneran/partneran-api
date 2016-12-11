@@ -26,7 +26,7 @@ const URL = 'http://localhost:8080'
 
 describe('Testing Module Ideas', () => {
 
-  beforeEach('should delete all ideas from database', (done) => {
+  beforeEach('should delete all ideas from database & create new idea for each testing purpose', (done) => {
     Ideas
       .destroy({
         where: {}

@@ -99,4 +99,8 @@ sequelize migration:create --name add_FK_categoryId_to_Ideas_table
 
 sequelize migration:create --name add_slug_to_Ideas_table
 
+
+create table comments :
+sequelize model:create --name Comments --attributes "commentId:integer,content:text"
+
 */
