@@ -50,7 +50,7 @@ ideaId: DataTypes.INTEGER(FK)
 ```javascript
 ideaId: DataTypes.INTEGER,
 title: DataTypes.STRING,
-description: DataTypes.STRING,
+description: DataTypes.TEXT,
 status: DataTypes.STRING,
 image: DataTypes.STRING,
 video: DataTypes.STRING,
@@ -60,26 +60,23 @@ categoryId: DataTypes.INTEGER(FK)
 ## Votes
 ```javascript
 voteId: DataTypes.INTEGER,
-title: DataTypes.STRING,
-description: DataTypes.STRING,
-status: DataTypes.STRING,
-image: DataTypes.STRING,
-categoryId: DataTypes.INTEGER(FK)
+votes: DataTypes.STRING,
+userId: DataTypes.INTEGER(FK),
+ideaId: DataTypes.INTEGER(FK)
 ```
 ## Comments
 ```javascript
 commentId: DataTypes.INTEGER,
-vote: DataTypes.STRING,
-status: DataTypes.BOOLEAN,
-ideaId: DataTypes.INTEGER(FK),
-userId: DataTypes.INTEGER(FK)
+content: DataTypes.STRING,
+userId: DataTypes.INTEGER(FK),
+ideaId: DataTypes.INTEGER(FK)
 ```
 ## Reports
 ```javascript
 reportId: DataTypes.INTEGER,
 reason: DataTypes.STRING,
 status: DataTypes.BOOLEAN,
-userid: DataTypes.INTEGER(FK),
+userId: DataTypes.INTEGER(FK),
 ideaId: DataTypes.INTEGER(FK)
 ```
 ## Category
@@ -92,13 +89,13 @@ name: DataTypes.STRING
 notificationId: DataTypes.INTEGER,
 message: DataTypes.STRING,
 status: DataTypes.BOOLEAN,
-userid: DataTypes.INTEGER(FK),
+userId: DataTypes.INTEGER(FK),
 ideaId: DataTypes.INTEGER(FK)
 ```
 ## User_notifs
 ```javascript
-user_notifId: DataTypes.INTEGER,
-user_receive: DataTypes.STRING,
+user_notif_id: DataTypes.INTEGER,
+userId: DataTypes.INTEGER(FK),
 notificationId: DataTypes.INTEGER(FK)
 ```
 
@@ -135,7 +132,7 @@ Default development port and host : http://localhost:3000/
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/ideas | POST | process new idea |
-| /api/ideas/:ideaid | GET | show an idea with it's comments |
+| /api/ideas/:slug | GET | show an idea with it's comments |
 | /api/ideas/ | GET |  show all ideas with it's comments |
 | /api/ideas/:ideaid | PUT  | edit an idea |
 | /api/ideas/:ideaid | DELETE | delete an idea |
