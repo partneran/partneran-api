@@ -108,4 +108,8 @@ sequelize model:create --name Comments --attributes "commentId:integer,content:t
 create table roles :
 sequelize model:create --name Roles --attributes "roleId:integer,roles:string"
 
+create table votes :
+sequelize model:create --name Votes --attributes "voteId:integer,votes:string"
+
+
 */
