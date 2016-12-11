@@ -29,7 +29,8 @@ let testingSignUp = (req, res, next) => {
     email: req.body.email,
     // photo_URL: req.body.photo_URL,
     verify: false,
-    name: req.body.name
+    name: req.body.name,
+    isSuper: false
   },req.body.password, (err, new_user) => {
     if(err){
       console.log('err', err);

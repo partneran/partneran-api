@@ -46,7 +46,8 @@ describe('Testing Module Users', () => {
       name: "test",
       email: "test@yahoo.com",
       // photo_URL: 'test_photo.png',
-      verify: false
+      verify: false,
+      isSuper: false
     },'123', (err, new_user) => {
       done()
     })
@@ -76,7 +77,8 @@ describe('Testing Module Users', () => {
         name: "Ken Duigraha Putra",
         email: "kenduigraha@yahoo.com",
         // photo_URL: 'test_photo.png',
-        verify: false
+        verify: false,
+        isSuper: false
       },'123', (err, new_user) => {
         expect(new_user.dataValues).to.be.an('object')
         expect(new_user.dataValues).to.have.ownProperty('userId')
@@ -87,12 +89,14 @@ describe('Testing Module Users', () => {
         expect(new_user.dataValues).to.have.ownProperty('photo_URL')
         expect(new_user.dataValues).to.have.ownProperty('short_bio')
         expect(new_user.dataValues).to.have.ownProperty('verify')
+        expect(new_user.dataValues).to.have.ownProperty('isSuper')
 
         new_user.userId.should.equal(1)
         new_user.name.should.equal("Ken Duigraha Putra")
         new_user.email.should.equal("kenduigraha@yahoo.com")
         // new_user.photo_URL.should.equal("test_photo.png")
         new_user.verify.should.equal(false)
+        new_user.isSuper.should.equal(false)
 
         done()
       })
@@ -123,11 +127,13 @@ describe('Testing Module Users', () => {
               expect(one_user.dataValues).to.have.ownProperty('photo_URL')
               expect(one_user.dataValues).to.have.ownProperty('short_bio')
               expect(one_user.dataValues).to.have.ownProperty('verify')
+              expect(one_user.dataValues).to.have.ownProperty('isSuper')
 
               one_user.userId.should.equal(all_users[0].userId)
               one_user.email.should.equal(all_users[0].email)
               // one_user.photo_URL.should.equal(all_users[0].photo_URL)
               one_user.verify.should.equal(all_users[0].verify)
+              one_user.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -175,6 +181,7 @@ describe('Testing Module Users', () => {
               expect(one_data.dataValues).to.have.ownProperty('photo_URL')
               expect(one_data.dataValues).to.have.ownProperty('short_bio')
               expect(one_data.dataValues).to.have.ownProperty('verify')
+              expect(one_data.dataValues).to.have.ownProperty('isSuper')
 
               one_data.userId.should.equal(all_users[0].userId)
               one_data.email.should.equal(new_data.email)
@@ -182,6 +189,7 @@ describe('Testing Module Users', () => {
               one_data.name.should.equal(new_data.name)
               one_data.short_bio.should.equal(new_data.short_bio)
               one_data.verify.should.equal(new_data.verify)
+              one_data.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -211,6 +219,7 @@ describe('Testing Module Users', () => {
                   expect(user_new_password.dataValues).to.have.ownProperty('photo_URL')
                   expect(user_new_password.dataValues).to.have.ownProperty('short_bio')
                   expect(user_new_password.dataValues).to.have.ownProperty('verify')
+                  expect(user_new_password.dataValues).to.have.ownProperty('isSuper')
 
                   user_new_password.userId.should.equal(all_users[0].userId)
                   user_new_password.name.should.equal(all_users[0].name)
@@ -218,6 +227,7 @@ describe('Testing Module Users', () => {
                   // user_new_password.photo_URL.should.equal(all_users[0].photo_URL)
                   // user_new_password.short_bio.should.equal(all_users[0].short_bio)
                   user_new_password.verify.should.equal(all_users[0].verify)
+                  user_new_password.isSuper.should.equal(all_users[0].isSuper)
 
                   done()
                 })
@@ -294,12 +304,14 @@ describe('Testing Module Users', () => {
           expect(res.body).to.have.ownProperty('photo_URL')
           expect(res.body).to.have.ownProperty('short_bio')
           expect(res.body).to.have.ownProperty('verify')
+          expect(res.body).to.have.ownProperty('isSuper')
 
           res.body.userId.should.equal(new_user.userId)
           res.body.name.should.equal(new_user.name)
           res.body.email.should.equal(new_user.email)
           // res.body.photo_URL.should.equal(new_user.photo_URL)
           res.body.verify.should.equal(false)
+          res.body.isSuper.should.equal(false)
 
           done()
         })
@@ -320,7 +332,8 @@ describe('Testing Module Users', () => {
                         sub: all_users[0].id,
                         email: all_users[0].email,
                         photo_URL: all_users[0].photo_URL,
-                        verify: false
+                        verify: all_users[0].verify,
+                        isSuper: all_users[0].isSuper
                     }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
 
           chai
@@ -340,12 +353,14 @@ describe('Testing Module Users', () => {
               expect(res.body).to.have.ownProperty('photo_URL')
               expect(res.body).to.have.ownProperty('short_bio')
               expect(res.body).to.have.ownProperty('verify')
+              expect(res.body).to.have.ownProperty('isSuper')
 
               res.body.userId.should.equal(all_users[0].userId)
               res.body.name.should.equal(all_users[0].name)
               res.body.email.should.equal(all_users[0].email)
               // res.body.photo_URL.should.equal(all_users[0].photo_URL)
               res.body.verify.should.equal(true)
+              res.body.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -411,12 +426,14 @@ describe('Testing Module Users', () => {
               expect(res.body).to.have.ownProperty('photo_URL')
               expect(res.body).to.have.ownProperty('short_bio')
               expect(res.body).to.have.ownProperty('verify')
+              expect(res.body).to.have.ownProperty('isSuper')
 
               res.body.userId.should.equal(all_users[0].userId)
               res.body.name.should.equal(all_users[0].name)
               res.body.email.should.equal(all_users[0].email)
               // res.body.photo_URL.should.equal(all_users[0].photo_URL)
               res.body.verify.should.equal(all_users[0].verify)
+              res.body.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -437,7 +454,8 @@ describe('Testing Module Users', () => {
                         sub: all_users[0].id,
                         email: all_users[0].email,
                         photo_URL: all_users[0].photo_URL,
-                        verify: false
+                        verify: all_users[0].verify,
+                        isSuper: all_users[0].isSuper
                     }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
 
           chai
@@ -457,12 +475,14 @@ describe('Testing Module Users', () => {
               expect(res.body).to.have.ownProperty('photo_URL')
               expect(res.body).to.have.ownProperty('short_bio')
               expect(res.body).to.have.ownProperty('verify')
+              expect(res.body).to.have.ownProperty('isSuper')
 
               res.body.userId.should.equal(all_users[0].userId)
               res.body.name.should.equal(all_users[0].name)
               res.body.email.should.equal(all_users[0].email)
               // res.body.photo_URL.should.equal(all_users[0].photo_URL)
               res.body.verify.should.equal(all_users[0].verify)
+              res.body.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -499,12 +519,14 @@ describe('Testing Module Users', () => {
               expect(res.body).to.have.ownProperty('photo_URL')
               expect(res.body).to.have.ownProperty('short_bio')
               expect(res.body).to.have.ownProperty('verify')
+              expect(res.body).to.have.ownProperty('isSuper')
 
               res.body.userId.should.equal(all_users[0].userId)
               res.body.name.should.equal(all_users[0].name)
               res.body.email.should.equal(all_users[0].email)
               // res.body.photo_URL.should.equal(all_users[0].photo_URL)
               res.body.verify.should.equal(all_users[0].verify)
+              res.body.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -537,12 +559,14 @@ describe('Testing Module Users', () => {
               expect(res.body).to.have.ownProperty('photo_URL')
               expect(res.body).to.have.ownProperty('short_bio')
               expect(res.body).to.have.ownProperty('verify')
+              expect(res.body).to.have.ownProperty('isSuper')
 
               res.body.userId.should.equal(all_users[0].userId)
               res.body.name.should.equal(all_users[0].name)
               res.body.email.should.equal(all_users[0].email)
               // res.body.photo_URL.should.equal(all_users[0].photo_URL)
               res.body.verify.should.equal(all_users[0].verify)
+              res.body.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
@@ -589,6 +613,7 @@ describe('Testing Module Users', () => {
               expect(res.body).to.have.ownProperty('photo_URL')
               expect(res.body).to.have.ownProperty('short_bio')
               expect(res.body).to.have.ownProperty('verify')
+              expect(res.body).to.have.ownProperty('isSuper')
 
               res.body.userId.should.equal(all_users[0].userId)
               res.body.name.should.equal(edit_data.name)
@@ -596,6 +621,7 @@ describe('Testing Module Users', () => {
               res.body.photo_URL.should.equal(edit_data.photo_URL)
               res.body.short_bio.should.equal(edit_data.short_bio)
               res.body.verify.should.equal(all_users[0].verify)
+              res.body.isSuper.should.equal(all_users[0].isSuper)
 
               done()
             })
