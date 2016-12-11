@@ -177,7 +177,7 @@ describe('Testing Module Comments', () => {
     * method : POST
     * End Point : /api/ideas/:ideaid/comments
   */
-  describe.only('Create a comment using API End Point', () => {
+  describe('Create a comment using API End Point', () => {
     it('should get data from API End Point when create a comment', (done) => {
       var new_comment_testing = {
         commentId: 1,
