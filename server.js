@@ -148,11 +148,17 @@ sequelize migration:create --name add_FK_UserId_to_Roles_table
 add FK IdeaId to Roles table
 sequelize migration:create --name add_FK_IdeaId_to_Roles_table
 
-
 add FK UserId to Votes table
 sequelize migration:create --name add_FK_UserId_to_Votes_table
 
 add FK IdeaId to Votes table
 sequelize migration:create --name add_FK_IdeaId_to_Votes_table
+
+
+add FK UserId to Reports table
+sequelize migration:create --name add_FK_UserId_to_Reports_table
+
+add FK IdeaId to Reports table
+sequelize migration:create --name add_FK_IdeaId_to_Reports_table
 
 */
