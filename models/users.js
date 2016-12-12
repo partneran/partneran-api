@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: true,
     },
     short_bio: DataTypes.STRING,
-    isSuper: DataTypes.BOOLEAN
+    isSuper: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

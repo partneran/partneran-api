@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     ideaId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
-    status: DataTypes.STRING,
+    status: DataTypes.BOOLEAN,
     image: DataTypes.STRING,
     video: DataTypes.STRING,
     userId: DataTypes.INTEGER,
