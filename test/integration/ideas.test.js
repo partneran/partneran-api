@@ -33,6 +33,14 @@ describe('Testing Module Ideas', () => {
       .destroy({
         where: {}
       })
+    Users
+      .destroy({
+        where: {}
+      })
+    Categories
+      .destroy({
+        where: {}
+      })
     var new_idea_testing = {
       ideaId: 1,
       title: "test title idea",

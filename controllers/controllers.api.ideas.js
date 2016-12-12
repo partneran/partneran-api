@@ -76,7 +76,13 @@ let getOneIdea = (req, res) => {
 */
 let getAllIdeas = (req, res) => {
   Ideas
-    .findAll()
+    .findAll({
+      include: [{
+        model: Users
+      },{
+        model: Categories
+      }]
+    })
     .then((all_ideas, err) => {
       if(err){
         console.log(err)
