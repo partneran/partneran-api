@@ -47,7 +47,7 @@ describe('Testing Module Comments', () => {
 
       Users.register({
         userId: 1,
-        email: "test@tets.com",
+        email: "test@tet12313123s.com",
         // photo_URL: req.body.photo_URL,
         verify: false,
         name: "test",
@@ -74,16 +74,11 @@ describe('Testing Module Comments', () => {
                 done()
               })
           })
-        // done()
       })
   })
 
   afterEach('should delete all comments from database', (done) => {
     Comments
-      .destroy({
-        where: {}
-      })
-    Users
       .destroy({
         where: {}
       })
@@ -95,7 +90,13 @@ describe('Testing Module Comments', () => {
       .destroy({
         where: {}
       })
-    done()
+    Users
+      .destroy({
+        where: {}
+      })
+      .then(() => {
+        done()
+      })
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -112,21 +113,31 @@ describe('Testing Module Comments', () => {
         commentId: 1,
         content: "test comment"
       }
-      Comments
-        .create({
-          commentId: new_comment_testing.commentId,
-          content: new_comment_testing.content
-        })
-        .then((new_comment) => {
-          expect(new_comment.dataValues).to.be.an('object')
-          expect(new_comment.dataValues).to.have.ownProperty("commentId")
-          expect(new_comment.dataValues).to.have.ownProperty("content")
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Comments
+            .create({
+              commentId: new_comment_testing.commentId,
+              content: new_comment_testing.content,
+              UserId: all_users[0].id,
+              IdeaId: idea.id
+            })
+            .then((new_comment) => {
+              expect(new_comment.dataValues).to.be.an('object')
+              expect(new_comment.dataValues).to.have.ownProperty("commentId")
+              expect(new_comment.dataValues).to.have.ownProperty("content")
 
-          new_comment.commentId.should.equal(new_comment_testing.commentId)
-          new_comment.content.should.equal(new_comment_testing.content)
+              new_comment.commentId.should.equal(new_comment_testing.commentId)
+              new_comment.content.should.equal(new_comment_testing.content)
 
-          done()
+              done()
+            })
         })
+      })
     })
   })
 
@@ -248,7 +259,8 @@ describe('Testing Module Comments', () => {
             .send({
               commentId: new_comment_testing.commentId,
               content: new_comment_testing.content,
-              UserId: all_users[0].id
+              UserId: all_users[0].id,
+              IdeaId: idea.id
             })
             .end((err, res) => {
               res.should.be.json
@@ -275,28 +287,34 @@ describe('Testing Module Comments', () => {
   */
   describe('Get a comment using API End Point', () => {
     it('should show a data comment from API End Point', (done) => {
-      Comments
-        .findAll()
-        .then((all_comments, err) => {
-          var ideaId = 1
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Comments
+            .findAll()
+            .then((all_comments, err) => {
+              chai
+                .request(URL)
+                .get('/api/ideas/'+idea.id+'/comments/'+all_comments[0].id)
+                .end((err, res) => {
+                  res.should.be.json
+                  res.should.have.status(200)
 
-          chai
-            .request(URL)
-            .get('/api/ideas/'+ideaId+'/comments/'+all_comments[0].id)
-            .end((err, res) => {
-              res.should.be.json
-              res.should.have.status(200)
+                  expect(res.body).to.be.an('object')
+                  expect(res.body).to.have.ownProperty("commentId")
+                  expect(res.body).to.have.ownProperty("content")
 
-              expect(res.body).to.be.an('object')
-              expect(res.body).to.have.ownProperty("commentId")
-              expect(res.body).to.have.ownProperty("content")
+                  res.body.commentId.should.equal(all_comments[0].commentId)
+                  res.body.content.should.equal(all_comments[0].content)
 
-              res.body.commentId.should.equal(all_comments[0].commentId)
-              res.body.content.should.equal(all_comments[0].content)
-
-              done()
+                  done()
+                })
             })
         })
+      })
     })
   })
 
@@ -307,30 +325,36 @@ describe('Testing Module Comments', () => {
   */
   describe('Get all comments using API End Point', () => {
     it('should show all comments data from API End Point', (done) => {
-      Comments
-        .findAll()
-        .then((all_comments, err) => {
-          var ideaId = 1
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Comments
+            .findAll()
+            .then((all_comments, err) => {
+              chai
+                .request(URL)
+                .get('/api/ideas/'+idea.id+'/comments/')
+                .end((err, res) => {
+                  res.should.be.json
+                  res.should.have.status(200)
 
-          chai
-            .request(URL)
-            .get('/api/ideas/'+ideaId+'/comments/')
-            .end((err, res) => {
-              res.should.be.json
-              res.should.have.status(200)
+                  expect(res.body).to.be.an('array')
+                  res.body.map(comment => {
+                    expect(comment).to.have.ownProperty("commentId")
+                    expect(comment).to.have.ownProperty("content")
+                  })
 
-              expect(res.body).to.be.an('array')
-              res.body.map(comment => {
-                expect(comment).to.have.ownProperty("commentId")
-                expect(comment).to.have.ownProperty("content")
-              })
+                  res.body[0].commentId.should.equal(all_comments[0].commentId)
+                  res.body[0].content.should.equal(all_comments[0].content)
 
-              res.body[0].commentId.should.equal(all_comments[0].commentId)
-              res.body[0].content.should.equal(all_comments[0].content)
-
-              done()
+                  done()
+                })
             })
         })
+      })
     })
   })
 
@@ -344,32 +368,37 @@ describe('Testing Module Comments', () => {
       var edit_data = {
         content: "comment edit bla bla bla"
       }
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+        Comments
+          .findAll()
+          .then((all_comments, err) => {
+            chai
+              .request(URL)
+              .put('/api/ideas/'+idea.id+'/comments/'+all_comments[0].id)
+              .send({
+                content: edit_data.content
+              })
+              .end((err, res) => {
+                res.should.be.json
+                res.should.have.status(200)
 
-      Comments
-        .findAll()
-        .then((all_comments, err) => {
-          var ideaId = 1
+                expect(res.body).to.be.an('object')
+                expect(res.body).to.have.ownProperty("commentId")
+                expect(res.body).to.have.ownProperty("content")
 
-          chai
-            .request(URL)
-            .put('/api/ideas/'+ideaId+'/comments/'+all_comments[0].id)
-            .send({
-              content: edit_data.content
-            })
-            .end((err, res) => {
-              res.should.be.json
-              res.should.have.status(200)
+                res.body.commentId.should.equal(all_comments[0].commentId)
+                res.body.content.should.equal(edit_data.content)
 
-              expect(res.body).to.be.an('object')
-              expect(res.body).to.have.ownProperty("commentId")
-              expect(res.body).to.have.ownProperty("content")
-
-              res.body.commentId.should.equal(all_comments[0].commentId)
-              res.body.content.should.equal(edit_data.content)
-
-              done()
-            })
+                done()
+              })
+          })
         })
+      })
     })
   })
 
@@ -380,23 +409,29 @@ describe('Testing Module Comments', () => {
   */
   describe('Delete a comment using API End Point', () => {
     it('should delete a comment and get data from API End Point', (done) => {
-      Comments
-        .findAll()
-        .then((all_comments, err) => {
-          var ideaId = 1
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Comments
+            .findAll()
+            .then((all_comments, err) => {
+              chai
+                .request(URL)
+                .delete('/api/ideas/'+idea.id+'/comments/'+all_comments[0].id)
+                .end((err, res) => {
+                  res.should.be.json
+                  res.should.have.status(200)
 
-          chai
-            .request(URL)
-            .delete('/api/ideas/'+ideaId+'/comments/'+all_comments[0].id)
-            .end((err, res) => {
-              res.should.be.json
-              res.should.have.status(200)
+                  expect(res.body).to.be.equal(1)
 
-              expect(res.body).to.be.equal(1)
-
-              done()
+                  done()
+                })
             })
         })
+      })
     })
   })
 })

@@ -78,7 +78,6 @@ describe('Testing Module Ideas', () => {
         .then(() => {
           done()
         })
-        // done()
     })
   })
 
@@ -87,15 +86,17 @@ describe('Testing Module Ideas', () => {
       .destroy({
         where: {}
       })
-    Users
-      .destroy({
-        where: {}
-      })
     Categories
       .destroy({
         where: {}
       })
-    done()
+    Users
+      .destroy({
+        where: {}
+      })
+      .then(() => {
+        done()
+      })
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
