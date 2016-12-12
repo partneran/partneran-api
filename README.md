@@ -164,3 +164,8 @@ Default development port and host : http://localhost:3000/
 | /api/notif/ | POST | process new notification |
 | /api/notif/:notifid | PUT | process mark notification as done |
 | /api/notif/:notifid | DELETE | delete one notification |
+
+#### Categories
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/categories/ | GET | show all categories |
