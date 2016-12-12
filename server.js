@@ -110,7 +110,6 @@ sequelize migration:create --name add_FK_categoryId_to_Ideas_table
 
 sequelize migration:create --name add_slug_to_Ideas_table
 
-
 create table comments :
 sequelize model:create --name Comments --attributes "commentId:integer,content:text"
 
@@ -137,4 +136,9 @@ sequelize seed:create --name seed_categories
 migrate seeder Categories
 sequelize db:seed --seed seeders/20161212144451-seed_categories.js
 
+add FK UserId to Ideas table
+sequelize migration:create --name add_FK_UserId_to_Comments_table
+
+add FK IdeaId to Ideas table
+sequelize migration:create --name add_FK_IdeaId_to_Comments_table
 */

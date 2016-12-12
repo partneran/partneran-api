@@ -5,6 +5,7 @@ const models = require ('../models')
 const Users = models.Users
 const Ideas = models.Ideas
 const Categories = models.Categories
+const Comments = models.Comments
 
 const slug = require('slug')
 
@@ -58,6 +59,11 @@ let getOneIdea = (req, res) => {
         model: Users
       },{
         model: Categories
+      },{
+        model: Comments,
+        include: {
+          model: Users
+        }
       }]
     })
     .then((one_idea, err) => {
@@ -81,6 +87,11 @@ let getAllIdeas = (req, res) => {
         model: Users
       },{
         model: Categories
+      },{
+        model: Comments,
+        include: {
+          model: Users
+        }
       }]
     })
     .then((all_ideas, err) => {

@@ -16,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
         // associations can be defined here
         Ideas.belongsTo(models.Users)
         Ideas.belongsTo(models.Categories)
+        Ideas.hasMany(models.Comments)
       }
     }
   });

@@ -3,6 +3,8 @@
 */
 const models = require ('../models')
 const Comments = models.Comments
+const Users = models.Users
+const Ideas = models.Ideas
 
 /*
   * method : POST
@@ -12,7 +14,9 @@ let createNewComment = (req, res) => {
   Comments
     .create({
       commentId: req.body.commentId,
-      content: req.body.content
+      content: req.body.content,
+      UserId: req.body.UserId,
+      IdeaId: req.params.ideaid
     })
     .then((new_comment, err) => {
       if(err){
@@ -30,7 +34,13 @@ let createNewComment = (req, res) => {
 */
 let getAllComments = (req, res) => {
   Comments
-  .findAll()
+  .findAll({
+    include: [{
+      model: Users
+    },{
+      model: Ideas
+    }]
+  })
   .then((all_coments, err) => {
     if(err){
       console.log(err);
@@ -50,7 +60,12 @@ let getOneComment = (req, res) => {
     .findOne({
       where: {
         id: req.params.commentid
-      }
+      },
+      include: [{
+        model: Users
+      },{
+        model: Ideas
+      }]
     })
     .then((one_comment, err) => {
       if(err){
