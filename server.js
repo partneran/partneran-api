@@ -132,4 +132,7 @@ sequelize model:create --name User_notifs --attributes "user_notif_id:integer"
 seeder Categories :
 sequelize seed:create --name seed_categories
 
+migrate seeder Categories
+sequelize db:seed --seed seeders/20161212144451-seed_categories.js
+
 */
