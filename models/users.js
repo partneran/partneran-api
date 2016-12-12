@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
         // associations can be defined here
         Users.hasMany(models.Ideas)
         Users.hasMany(models.Comments)
-        // Users.hasMany(models.Roles)
+        Users.hasMany(models.Roles)
       }
     }
   });
