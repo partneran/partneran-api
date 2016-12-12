@@ -3,6 +3,7 @@
 */
 const models = require ('../models')
 const Ideas = models.Ideas
+const Categories = models.Categories
 
 const slug = require('slug')
 
@@ -11,26 +12,35 @@ const slug = require('slug')
   * End Point : /api/ideas
 */
 let createNewIdea = (req, res) => {
-  Ideas
-    .create({
-      ideaId: req.body.ideaId,
-      title: req.body.title,
-      description: req.body.description,
-      status: 'baby',
-      image: req.body.image,
-      video: req.body.video,
-      slug: slug(req.body.title),
-      userId: req.body.userId,
-      categoryId: req.body.categoryId
-    })
-    .then((new_idea, err) => {
-      if(err){
-        console.log(err)
-        res.json(err)
-      }else{
-        res.json(new_idea)
+  Categories
+    .findOne({
+      where: {
+        name: req.body.category
       }
     })
+    .then((one_category, err) => {
+        Ideas
+          .create({
+            ideaId: req.body.ideaId,
+            title: req.body.title,
+            description: req.body.description,
+            status: 'baby',
+            image: req.body.image,
+            video: req.body.video,
+            slug: slug(req.body.title),
+            userId: req.body.userId,
+            categoryId: one_category.id
+          })
+          .then((new_idea, err) => {
+            if(err){
+              console.log(err)
+              res.json(err)
+            }else{
+              res.json(new_idea)
+            }
+          })
+    })
+
 }
 
 /*
