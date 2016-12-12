@@ -162,7 +162,7 @@ describe('Testing Notifications Model', () => {
           status: new_notif.status
         })
         .end((err, res) => {
-          res.should.be.json()
+          res.should.be.json
           res.should.have.status(200)
 
           expect(res.body).to.be.an('object')
@@ -200,7 +200,7 @@ describe('Testing Notifications Model', () => {
               status: update_data.status
             })
             .end((err, res) => {
-              res.should.be.json()
+              res.should.be.json
               res.should.have.status(200)
 
               expect(res.body).to.be.an('object')
