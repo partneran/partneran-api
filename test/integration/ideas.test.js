@@ -74,9 +74,11 @@ describe('Testing Module Ideas', () => {
           video: new_idea_testing.video,
           slug: new_idea_testing.slug,
           category: new_idea_testing.category
-        }).then(() => {
+        })
+        .then(() => {
           done()
         })
+        // done()
     })
   })
 
@@ -282,39 +284,44 @@ describe('Testing Module Ideas', () => {
         video: "test image video",
         category: "EdTech"
       }
-      chai
-        .request(URL)
-        .post('/api/ideas')
-        .send({
-          ideaId: new_idea_testing.ideaId,
-          title: new_idea_testing.title,
-          description: new_idea_testing.description,
-          image: new_idea_testing.image,
-          video: new_idea_testing.video,
-          category: new_idea_testing.category
-        })
-        .end((err, res) => {
-          res.should.be.json
-          res.should.have.status(200)
+      Users
+        .findAll()
+        .then((all_users) => {
+        chai
+          .request(URL)
+          .post('/api/ideas')
+          .send({
+            ideaId: new_idea_testing.ideaId,
+            title: new_idea_testing.title,
+            description: new_idea_testing.description,
+            image: new_idea_testing.image,
+            video: new_idea_testing.video,
+            UserId: all_users[0].id,
+            category: new_idea_testing.category
+          })
+          .end((err, res) => {
+            res.should.be.json
+            res.should.have.status(200)
 
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.ownProperty("ideaId")
-          expect(res.body).to.have.ownProperty("title")
-          expect(res.body).to.have.ownProperty("description")
-          expect(res.body).to.have.ownProperty("status")
-          expect(res.body).to.have.ownProperty("image")
-          expect(res.body).to.have.ownProperty("video")
-          // expect(res.body).to.have.ownProperty("UserId")
-          // expect(res.body).to.have.ownProperty("CategoryId")
+            expect(res.body).to.be.an('object')
+            expect(res.body).to.have.ownProperty("ideaId")
+            expect(res.body).to.have.ownProperty("title")
+            expect(res.body).to.have.ownProperty("description")
+            expect(res.body).to.have.ownProperty("status")
+            expect(res.body).to.have.ownProperty("image")
+            expect(res.body).to.have.ownProperty("video")
+            expect(res.body).to.have.ownProperty("UserId")
+            expect(res.body).to.have.ownProperty("CategoryId")
 
-          res.body.ideaId.should.equal(new_idea_testing.ideaId)
-          res.body.title.should.equal(new_idea_testing.title)
-          res.body.description.should.equal(new_idea_testing.description)
-          res.body.status.should.equal(new_idea_testing.status)
-          res.body.image.should.equal(new_idea_testing.image)
-          res.body.video.should.equal(new_idea_testing.video)
+            res.body.ideaId.should.equal(new_idea_testing.ideaId)
+            res.body.title.should.equal(new_idea_testing.title)
+            res.body.description.should.equal(new_idea_testing.description)
+            res.body.status.should.equal(new_idea_testing.status)
+            res.body.image.should.equal(new_idea_testing.image)
+            res.body.video.should.equal(new_idea_testing.video)
 
-          done()
+            done()
+          })
         })
     })
   })

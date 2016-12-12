@@ -12,6 +12,9 @@ chai.use(chaiHTTP)
 */
 const models = require ('../../models')
 const Comments = models.Comments
+const Users = models.Users
+const Ideas = models.Ideas
+const Categories = models.Categories
 
 /*
   * URL
@@ -29,18 +32,66 @@ describe('Testing Module Comments', () => {
       .destroy({
         where: {}
       })
-    Comments
-      .create({
-        commentId: 1,
-        content: "seed data comment"
+    Users
+      .destroy({
+        where: {}
       })
-      .then(() => {
-      done()
-    })
+    Ideas
+      .destroy({
+        where: {}
+      })
+    Categories
+      .destroy({
+        where: {}
+      })
+
+      Users.register({
+        userId: 1,
+        email: "test@tets.com",
+        // photo_URL: req.body.photo_URL,
+        verify: false,
+        name: "test",
+        isSuper: 'LOL'
+      }, "123", (err, new_user) => {
+        Categories
+          .create({
+            name: "EdTech"
+          })
+        Ideas
+          .create({
+            ideaId: 1,
+            UserId: new_user.id,
+            category: "EdTech"
+          }).then((idea) => {
+            Comments
+              .create({
+                commentId: 1,
+                content: "seed data comment",
+                UserId: new_user.id,
+                IdeaId: idea.id
+              })
+              .then(() => {
+                done()
+              })
+          })
+        // done()
+      })
   })
 
   afterEach('should delete all comments from database', (done) => {
     Comments
+      .destroy({
+        where: {}
+      })
+    Users
+      .destroy({
+        where: {}
+      })
+    Ideas
+      .destroy({
+        where: {}
+      })
+    Categories
       .destroy({
         where: {}
       })
@@ -87,11 +138,11 @@ describe('Testing Module Comments', () => {
     it('should show one comment', (done) => {
       Comments
       .findAll()
-      .then((all_coments, err) => {
+      .then((all_comments, err) => {
         Comments
           .findOne({
             where: {
-              id: all_coments[0].id
+              id: all_comments[0].id
             }
           })
           .then((new_comment) => {
@@ -99,8 +150,8 @@ describe('Testing Module Comments', () => {
             expect(new_comment.dataValues).to.have.ownProperty("commentId")
             expect(new_comment.dataValues).to.have.ownProperty("content")
 
-            new_comment.commentId.should.equal(all_coments[0].commentId)
-            new_comment.content.should.equal(all_coments[0].content)
+            new_comment.commentId.should.equal(all_comments[0].commentId)
+            new_comment.content.should.equal(all_comments[0].content)
 
             done()
           })
@@ -116,11 +167,11 @@ describe('Testing Module Comments', () => {
     it('should edit one comment', (done) => {
       Comments
       .findAll()
-      .then((all_coments, err) => {
+      .then((all_comments, err) => {
         Comments
           .findOne({
             where: {
-              id: all_coments[0].id
+              id: all_comments[0].id
             }
           })
           .then((new_comment) => {
@@ -135,7 +186,7 @@ describe('Testing Module Comments', () => {
             expect(new_comment.dataValues).to.have.ownProperty("commentId")
             expect(new_comment.dataValues).to.have.ownProperty("content")
 
-            new_comment.commentId.should.equal(all_coments[0].commentId)
+            new_comment.commentId.should.equal(all_comments[0].commentId)
             new_comment.content.should.equal(new_data.content)
 
             done()
@@ -185,26 +236,35 @@ describe('Testing Module Comments', () => {
       }
       var ideaId = 1
 
-      chai
-        .request(URL)
-        .post('/api/ideas/'+ideaId+'/comments')
-        .send({
-          commentId: new_comment_testing.commentId,
-          content: new_comment_testing.content
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          chai
+            .request(URL)
+            .post('/api/ideas/'+idea.id+'/comments')
+            .send({
+              commentId: new_comment_testing.commentId,
+              content: new_comment_testing.content,
+              UserId: all_users[0].id
+            })
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body).to.have.ownProperty("commentId")
+              expect(res.body).to.have.ownProperty("content")
+
+              res.body.commentId.should.equal(new_comment_testing.commentId)
+              res.body.content.should.equal(new_comment_testing.content)
+
+              done()
+            })
         })
-        .end((err, res) => {
-          res.should.be.json
-          res.should.have.status(200)
-
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.ownProperty("commentId")
-          expect(res.body).to.have.ownProperty("content")
-
-          res.body.commentId.should.equal(new_comment_testing.commentId)
-          res.body.content.should.equal(new_comment_testing.content)
-
-          done()
-        })
+      })
     })
   })
 
