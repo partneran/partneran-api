@@ -55,7 +55,7 @@ describe('Testing Reports Model', () => {
     * test create a report
     * end point : /api/ideas/:ideaid/reports/
   */
-  describe.only('Create one report', () => {
+  describe('Create one report', () => {
     it('should create one report', (done) => {
       Reports
         .create({
@@ -82,7 +82,7 @@ describe('Testing Reports Model', () => {
     * test show all reports
     * end point : /api/ideas/:ideaid/reports/
   */
-  describe.only('Get all reports', () => {
+  describe('Get all reports', () => {
     it('should show all reports', (done) => {
       Reports
       .findAll()
@@ -107,7 +107,7 @@ describe('Testing Reports Model', () => {
     * test delete a report
     * end point : /api/ideas/:ideaid/reports/:reportid
   */
-  describe.only('Delete one report', () => {
+  describe('Delete one report', () => {
     it('should delete one vote', (done) => {
       Reports
       .findAll()
@@ -131,5 +131,96 @@ describe('Testing Reports Model', () => {
   //  test end point reports
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+  /*
+    * testing add one report
+    * method : POST
+    * End Point : /api/ideas/:ideaid/reports/
+  */
+  describe.only('Create one report using API End Point', () => {
+    it('should get data from API End Point when create one report', (done) => {
+      var new_report = {
+        reportId: 1,
+        reason: "This author's idea is copied form my own original idea!",
+        status: false
+      }
+
+      chai
+        .request(URL)
+        .post('/api/ideas/1/reports')
+        .send({
+          reportId: new_report.reportId,
+          reason: new_report.reason,
+          status: new_report.status
+        })
+        .end((err, res) => {
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty("reportId")
+          expect(res.body).to.have.ownProperty("reason")
+          expect(res.body).to.have.ownProperty("status")
+
+          res.body.reportId.should.equal(new_report.reportId)
+          res.body.reason.should.equal(new_report.reason)
+          res.body.status.should.equal(new_report.status)
+
+          done()
+        })
+    })
+  })
+
+  /*
+    * testing show all reports
+    * method : GET
+    * End Point : /api/ideas/:ideaid/reports/
+  */
+  describe.only('Get all reports using API End Point', () => {
+    it('should get all data reports from API End Point', (done) => {
+      chai
+        .request(URL)
+        .get('/api/ideas/1/reports')
+        .end((err, res) => {
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          res.body.map((report) => {
+            expect(report).to.have.ownProperty("reportId")
+            expect(report).to.have.ownProperty("reason")
+            expect(report).to.have.ownProperty("status")
+          })
+
+          res.body[0].reportId.should.equal(1)
+          res.body[0].reason.should.equal("This author's idea is copied form my own original idea!")
+          res.body[0].status.should.equal(false)
+        })
+    })
+  })
+
+  /*
+    * testing delete one report
+    * method : DELETE
+    * End Point : /api/ideas/:ideaid/reports/:reportid
+  */
+  describe.only('Delete one report using API End Point', () => {
+    it('should get data from API End Point when delete one report', (done) => {
+      Reports
+        .findAll()
+        .then((all_reports) => {
+          chai
+            .request(URL)
+            .delete('/api/ideas/1/reports/'+all_reports[0].id)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.equal(1)
+
+              done()
+            })
+        })
+    })
+  })
 
 })

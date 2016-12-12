@@ -142,7 +142,7 @@ describe('Testing Votes Model', () => {
     it('should get data from API End Point when up vote', (done) => {
       chai
         .request(URL)
-        .post('/api/ideas/:ideaid/votes/')
+        .post('/api/ideas/1/votes/')
         .send({
           voteId: 1,
           votes: 1
@@ -175,7 +175,7 @@ describe('Testing Votes Model', () => {
         .then((all_votes) => {
           chai
             .request(URL)
-            .get('/api/ideas/:ideaid/votes/testcount/'+all_votes[0].id)
+            .get('/api/ideas/1/votes/testcount/'+all_votes[0].id)
             .end((err, res) => {
               res.should.be.json
               res.should.have.status(200)
@@ -206,7 +206,7 @@ describe('Testing Votes Model', () => {
         .then((all_votes) => {
           chai
             .request(URL)
-            .delete('/api/ideas/:ideaid/votes/'+all_votes[0].id)
+            .delete('/api/ideas/1/votes/'+all_votes[0].id)
             .end((err, res) => {
               res.should.be.json
               res.should.have.status(200)
