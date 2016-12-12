@@ -33,6 +33,7 @@ module.exports = function(sequelize, DataTypes) {
         Users.hasMany(models.Votes)
         Users.hasMany(models.Reports)
         Users.hasMany(models.Notifications)
+        Users.hasMany(models.User_notifs)
       }
     }
   });

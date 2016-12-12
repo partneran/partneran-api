@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
         // associations can be defined here
         Notifications.belongsTo(models.Users)
         Notifications.belongsTo(models.Ideas)
+        Notifications.hasMany(models.User_notifs)
       }
     }
   });

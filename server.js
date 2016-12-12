@@ -165,4 +165,11 @@ sequelize migration:create --name add_FK_UserId_to_Notifications_table
 
 add FK IdeaId to Notifications table
 sequelize migration:create --name add_FK_IdeaId_to_Notifications_table
+
+add FK UserId to User_Notifs table
+sequelize migration:create --name add_FK_UserId_to_User_Notifs_table
+
+add FK IdeaId to User_Notifs table
+sequelize migration:create --name add_FK_notificationId_to_User_Notifs_table
+
 */
