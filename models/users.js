@@ -22,7 +22,8 @@ module.exports = function(sequelize, DataTypes) {
       unique: true,
     },
     short_bio: DataTypes.STRING,
-    isSuper: DataTypes.STRING
+    isSuper: DataTypes.STRING,
+    isJoinIdea: DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: function(models) {
