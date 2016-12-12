@@ -13,6 +13,11 @@ chai.use(chaiHTTP)
 const models = require ('../../models')
 const Votes = models.Votes
 
+/*
+  * URL
+*/
+const URL = 'http://localhost:8080'
+
 /* ================================================ */
 /*                     Testing                       */
 /* ================================================ */
@@ -128,5 +133,90 @@ describe('Testing Votes Model', () => {
   //  test end point votes
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+  /*
+    * testing up vote
+    * method : POST
+    * End Point : /api/ideas/:ideaid/votes/
+  */
+  describe('Up vote using API End Point', () => {
+    it('should get data from API End Point when up vote', (done) => {
+      chai
+        .request(URL)
+        .post('/api/ideas/:ideaid/votes/')
+        .send({
+          voteId: 1,
+          votes: 1
+        })
+        .end((err, res) => {
+          res.should.be.json
+          res.should.have.status(200)
+
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.ownProperty("voteId")
+          expect(res.body).to.have.ownProperty("votes")
+
+          res.body.voteId.should.equal(1)
+          res.body.votes.should.equal(1)
+
+          done()
+        })
+    })
+  })
+
+  /*
+    * testing show vote's count
+    * method : GET
+    * End Point : /api/ideas/:ideaid/votes/
+  */
+  describe('Get vote\'s count using API End Point', () => {
+    it('should get vote\'s count from API End Point', (done) => {
+      Votes
+        .findAll()
+        .then((all_votes) => {
+          chai
+            .request(URL)
+            .get('/api/ideas/:ideaid/votes/testcount/'+all_votes[0].id)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body.rows[0]).to.have.property("voteId")
+              expect(res.body.rows[0]).to.have.property("votes")
+
+              res.body.count.should.equal(1)
+              res.body.rows[0].voteId.should.equal(all_votes[0].voteId)
+              res.body.rows[0].votes.should.equal(all_votes[0].votes)
+
+              done()
+            })
+        })
+    })
+  })
+
+  /*
+    * testing show vote's count
+    * method : POST
+    * End Point : /api/ideas/:ideaid/votes/:voteid
+  */
+  describe('Down vote using API End Point', () => {
+    it('should delete 1 vote from API End Point when down vote', (done) => {
+      Votes
+        .findAll()
+        .then((all_votes) => {
+          chai
+            .request(URL)
+            .delete('/api/ideas/:ideaid/votes/'+all_votes[0].id)
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.equal(1)
+
+              done()
+            })
+        })
+    })
+  })
 
 })
