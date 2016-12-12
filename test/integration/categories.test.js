@@ -43,7 +43,9 @@ describe('Testing Categories Model', () => {
       .destroy({
         where: {}
       })
-    done()
+      .then(() => {
+        done()
+      })
   })
 
   describe('Get all categories', () => {

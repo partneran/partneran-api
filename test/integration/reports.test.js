@@ -44,7 +44,9 @@ describe('Testing Reports Model', () => {
       .destroy({
         where: {}
       })
-    done()
+      .then(() => {
+        done()
+      })
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

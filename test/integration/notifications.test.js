@@ -44,7 +44,9 @@ describe('Testing Notifications Model', () => {
       .destroy({
         where: {}
       })
-    done()
+      .then(() => {      
+        done()
+      })
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

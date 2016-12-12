@@ -43,7 +43,9 @@ describe('Testing Votes Model', () => {
       .destroy({
         where: {}
       })
-    done()
+      .then(() => {
+        done()
+      })
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

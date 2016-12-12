@@ -37,7 +37,9 @@ describe('Testing User_notif Model', () => {
       .destroy({
         where: {}
       })
-    done()
+      .then(() => {
+        done()
+      })
   })
 
   describe('Create one User_notif', () => {

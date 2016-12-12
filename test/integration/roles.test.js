@@ -35,8 +35,8 @@ describe('Testing Module Roles', () => {
         roles: "Founder"
       })
       .then(() => {
-      done()
-    })
+        done()
+      })
   })
 
   afterEach('should delete all roles from database', (done) => {
@@ -44,7 +44,9 @@ describe('Testing Module Roles', () => {
       .destroy({
         where: {}
       })
-    done()
+      .then(() => {
+        done()
+      })
   })
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
