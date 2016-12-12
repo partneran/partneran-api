@@ -50,7 +50,7 @@ let signUpUser = (req, res, next) => {
                 sub: req.body.id,
                 name: req.body.name,
                 email: req.body.email,
-                photo_URL: req.body.photo_URL,
+                // photo_URL: req.body.photo_URL,
                 verify: false,
                 isSuper: 'super'
             }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
@@ -73,7 +73,7 @@ let signUpUser = (req, res, next) => {
     html: `<a href="http://localhost:8080/api/auth/verification/${token}" target="_blank"></a>` // html body
   };
 
-  if(req.body.password.length > 8){
+  if(req.body.password.length >= 8){
     transport.sendMail(mailOptions, function(error, info) {
         if (error) {
           console.log(error);
@@ -87,7 +87,8 @@ let signUpUser = (req, res, next) => {
             email: req.body.email,
             name: req.body.name,
             // photo_URL: req.body.photoURL,
-            verify: false
+            verify: false,
+            isSuper: 'user'
           }, req.body.password, (err, new_user) => {
             if(err){
               console.log(err);
@@ -145,6 +146,7 @@ let loginUser = (req, res, next) => {
           token: jwt.sign({
             sub: user.id,
             email: user.email,
+            name: user.name,
             photo_URL: user.photo_URL
           }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
         })

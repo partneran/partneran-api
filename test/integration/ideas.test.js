@@ -71,7 +71,7 @@ describe('Testing Module Ideas', () => {
     * test create an idea
     * end point : /api/ideas
   */
-  describe('Create one idea', () => {
+  describe.only('Create one idea', () => {
     it('should create one idea', (done) => {
       var new_idea_testing = {
         ideaId: 1,

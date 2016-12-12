@@ -129,5 +129,7 @@ sequelize model:create --name Notifications --attributes "notificationId:integer
 create table user_notifs :
 sequelize model:create --name User_notifs --attributes "user_notif_id:integer"
 
+seeder Categories :
+sequelize seed:create --name seed_categories
 
 */
