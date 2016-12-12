@@ -31,7 +31,7 @@ describe('Testing Reports Model', () => {
     Reports
       .create({
         reportId: 1,
-        reason: "This auhtor's idea is copied form my own original idea!",
+        reason: "This author's idea is copied form my own original idea!",
         status: false
       })
       .then(() => {
