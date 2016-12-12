@@ -30,7 +30,7 @@ let testingSignUp = (req, res, next) => {
     // photo_URL: req.body.photo_URL,
     verify: false,
     name: req.body.name,
-    isSuper: false
+    isSuper: 'LOL'
   },req.body.password, (err, new_user) => {
     if(err){
       console.log('err', err);
@@ -51,7 +51,8 @@ let signUpUser = (req, res, next) => {
                 name: req.body.name,
                 email: req.body.email,
                 photo_URL: req.body.photo_URL,
-                verify: false
+                verify: false,
+                isSuper: 'super'
             }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
 
   var transport = nodemailer.createTransport(smtpTransport({

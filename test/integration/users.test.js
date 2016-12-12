@@ -47,7 +47,7 @@ describe('Testing Module Users', () => {
       email: "test@yahoo.com",
       // photo_URL: 'test_photo.png',
       verify: false,
-      isSuper: false
+      isSuper: 'LOL'
     },'123', (err, new_user) => {
       done()
     })
@@ -78,7 +78,7 @@ describe('Testing Module Users', () => {
         email: "kenduigraha@yahoo.com",
         // photo_URL: 'test_photo.png',
         verify: false,
-        isSuper: false
+        isSuper: 'LOL'
       },'123', (err, new_user) => {
         expect(new_user.dataValues).to.be.an('object')
         expect(new_user.dataValues).to.have.ownProperty('userId')
@@ -96,7 +96,7 @@ describe('Testing Module Users', () => {
         new_user.email.should.equal("kenduigraha@yahoo.com")
         // new_user.photo_URL.should.equal("test_photo.png")
         new_user.verify.should.equal(false)
-        new_user.isSuper.should.equal(false)
+        new_user.isSuper.should.equal('LOL')
 
         done()
       })
@@ -311,7 +311,7 @@ describe('Testing Module Users', () => {
           res.body.email.should.equal(new_user.email)
           // res.body.photo_URL.should.equal(new_user.photo_URL)
           res.body.verify.should.equal(false)
-          res.body.isSuper.should.equal(false)
+          res.body.isSuper.should.equal('LOL')
 
           done()
         })
