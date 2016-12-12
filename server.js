@@ -116,4 +116,8 @@ sequelize model:create --name Votes --attributes "voteId:integer,votes:string"
 
 sequelize migration:create --name add_isSuper_column_to_users_table
 
+create table reports :
+sequelize model:create --name Reports --attributes "reportId:integer,reason:string,status:boolean"
+
+
 */
