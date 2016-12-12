@@ -126,5 +126,8 @@ sequelize model:create --name Reports --attributes "reportId:integer,reason:stri
 create table notifications :
 sequelize model:create --name Notifications --attributes "notificationId:integer,message:string,status:boolean"
 
+create table user_notifs :
+sequelize model:create --name User_notifs --attributes "user_notif_id:integer"
+
 
 */

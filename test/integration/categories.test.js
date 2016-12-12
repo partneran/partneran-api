@@ -30,7 +30,7 @@ describe('Testing Categories Model', () => {
       })
     Categories
       .create({
-        categoryid: 1,
+        categoryId: 1,
         name: "test name category"
       })
       .then(() => {
@@ -58,6 +58,9 @@ describe('Testing Categories Model', () => {
             expect(category.dataValues).to.have.ownProperty("name")
           })
 
+          all_categories[0].categoryId.should.equal(1)
+          all_categories[0].name.should.equal("test name category")
+
           done()
         })
     })
@@ -79,6 +82,9 @@ describe('Testing Categories Model', () => {
 
               expect(one_category.dataValues).to.have.ownProperty("categoryId")
               expect(one_category.dataValues).to.have.ownProperty("name")
+
+              one_category.categoryId.should.equal(all_categories[0].categoryId)
+              one_category.name.should.equal(all_categories[0].name)
 
               done()
             })
