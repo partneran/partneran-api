@@ -11,7 +11,7 @@ module.exports = {
     */
     return queryInterface.addColumn(
       'Ideas',
-      'userId',
+      'UserId',
       {
         type: Sequelize.INTEGER,
         references :{
@@ -32,6 +32,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-    return queryInterface.removeColumn('Ideas','userId')
+    return queryInterface.removeColumn('Ideas','UserId')
   }
 };

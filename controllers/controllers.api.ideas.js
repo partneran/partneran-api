@@ -28,8 +28,8 @@ let createNewIdea = (req, res) => {
             image: req.body.image,
             video: req.body.video,
             slug: slug(req.body.title),
-            userId: req.body.userId,
-            categoryId: one_category.id
+            UserId: req.body.UserId,
+            CategoryId: one_category.id
           })
           .then((new_idea, err) => {
             if(err){

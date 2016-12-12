@@ -7,8 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     status: DataTypes.STRING,
     image: DataTypes.STRING,
     video: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
-    categoryId: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
+    CategoryId: DataTypes.INTEGER,
     slug: DataTypes.STRING,
   }, {
     classMethods: {
