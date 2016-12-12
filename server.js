@@ -14,6 +14,7 @@ const routeComments = require('./routes/routes.api.comments')
 const routeVotes = require('./routes/routes.api.votes')
 const routeReports = require('./routes/routes.api.reports')
 const routeNotifs = require('./routes/routes.api.notifs')
+const routeCategories = require('./routes/routes.api.categories')
 
 
 /*
@@ -44,6 +45,7 @@ app.use('/api/ideas', routeComments)
 app.use('/api/ideas', routeVotes)
 app.use('/api/ideas', routeReports)
 app.use('/api/notif', routeNotifs)
+app.use('/api/categories', routeCategories)
 
 // passport.use(new LocalStrategy(Users.authenticate()))
 passport.use(new LocalStrategy({
