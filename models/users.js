@@ -28,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         // associations can be defined here
         Users.hasMany(models.Ideas)
-        Users.hasMany(models.Roles)
+        // Users.hasMany(models.Roles)
       }
     }
   });

@@ -2,6 +2,7 @@
   * Models
 */
 const models = require ('../models')
+const Users = models.Users
 const Ideas = models.Ideas
 const Categories = models.Categories
 
@@ -52,7 +53,12 @@ let getOneIdea = (req, res) => {
     .findOne({
       where: {
         slug: req.params.slug
-      }
+      },
+      include: [{
+        model: Users
+      },{
+        model: Categories
+      }]
     })
     .then((one_idea, err) => {
       if(err){
