@@ -55,9 +55,9 @@ describe('Testing Notifications Model', () => {
     * test create a notification
     * end point : /api/notif
   */
-  describe.only('Create one notification', () => {
+  describe('Create one notification', () => {
     it('should create one notification', (done) => {
-      Reports
+      Notifications
         .create({
           notificationId: 1,
           message: "testing notif",
@@ -82,28 +82,32 @@ describe('Testing Notifications Model', () => {
     * test edit a notification
     * end point : /api/notif/:notifid
   */
-  describe.only('Edit one notification', () => {
+  describe('Edit one notification', () => {
     it('should edit one notification', (done) => {
-      Reports
-        .findOne({
-          where: {
-            id: req.params.notifid
-          }
-        })
-        .then((one_notif) => {
-          one_notif.status = true
-          one_notif.save()
+      Notifications
+        .findAll()
+        .then((all_notifs) => {
+          Notifications
+            .findOne({
+              where: {
+                id: all_notifs[0].id
+              }
+            })
+            .then((one_notif) => {
+              one_notif.status = true
+              one_notif.save()
 
-          expect(one_notif.dataValues).to.be.an('object')
-          expect(one_notif.dataValues).to.have.ownProperty("notificationId")
-          expect(one_notif.dataValues).to.have.ownProperty("message")
-          expect(one_notif.dataValues).to.have.ownProperty("status")
+              expect(one_notif.dataValues).to.be.an('object')
+              expect(one_notif.dataValues).to.have.ownProperty("notificationId")
+              expect(one_notif.dataValues).to.have.ownProperty("message")
+              expect(one_notif.dataValues).to.have.ownProperty("status")
 
-          one_notif.notificationId.should.equal(1)
-          one_notif.message.should.equal("testing notif")
-          one_notif.status.should.equal(false)
+              one_notif.notificationId.should.equal(1)
+              one_notif.message.should.equal(all_notifs[0].message)
+              one_notif.status.should.equal(true)
 
-          done()
+              done()
+            })
         })
     })
   })
@@ -112,7 +116,7 @@ describe('Testing Notifications Model', () => {
     * test delete a notification
     * end point : /api/notif/:notifid
   */
-  describe.only('Delete one report', () => {
+  describe('Delete one report', () => {
     it('should delete one vote', (done) => {
       Notifications
       .findAll()
