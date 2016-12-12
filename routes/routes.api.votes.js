@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/:ideaid/votes', controller.upVote)
 router.get('/:ideaid/votes/:voteid', controller.getCountVote)
-router.get('/:ideaid/votes/:voteid', controller.downVote)
+router.delete('/:ideaid/votes/:voteid', controller.downVote)
+router.get('/:ideaid/votes/testcount/:voteid', controller.testCountVote)
 
 module.exports = router;

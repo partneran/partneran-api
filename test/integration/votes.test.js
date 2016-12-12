@@ -138,7 +138,7 @@ describe('Testing Votes Model', () => {
     * method : POST
     * End Point : /api/ideas/:ideaid/votes/
   */
-  describe.only('Up vote using API End Point', () => {
+  describe('Up vote using API End Point', () => {
     it('should get data from API End Point when up vote', (done) => {
       chai
         .request(URL)
@@ -175,18 +175,18 @@ describe('Testing Votes Model', () => {
         .then((all_votes) => {
           chai
             .request(URL)
-            .get('/api/ideas/:ideaid/votes/'+all_votes[0].id)
+            .get('/api/ideas/:ideaid/votes/testcount/'+all_votes[0].id)
             .end((err, res) => {
               res.should.be.json
               res.should.have.status(200)
 
-              expect(req.body).to.be.an('object')
-              expect(req.body.rows[0].dataValues).to.have.ownProperty("voteId")
-              expect(req.body.rows[0].dataValues).to.have.ownProperty("votes")
+              expect(res.body).to.be.an('object')
+              expect(res.body.rows[0]).to.have.property("voteId")
+              expect(res.body.rows[0]).to.have.property("votes")
 
-              req.body.count.should.equal(1)
-              req.body.rows[0].dataValues.voteId.should.equal(all_votes[0].voteId)
-              req.body.rows[0].dataValues.votes.should.equal(all_votes[0].votes)
+              res.body.count.should.equal(1)
+              res.body.rows[0].voteId.should.equal(all_votes[0].voteId)
+              res.body.rows[0].votes.should.equal(all_votes[0].votes)
 
               done()
             })
@@ -213,6 +213,7 @@ describe('Testing Votes Model', () => {
 
               expect(res.body).to.be.equal(1)
 
+              done()
             })
         })
     })

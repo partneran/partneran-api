@@ -28,7 +28,6 @@ let createNewIdea = (req, res) => {
         console.log(err)
         res.json(err)
       }else{
-        console.log(new_idea);
         res.json(new_idea)
       }
     })

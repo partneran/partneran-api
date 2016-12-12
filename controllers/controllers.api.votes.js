@@ -19,7 +19,7 @@ let upVote = (req, res) => {
         console.log(err)
         res.json(err)
       }else{
-        req.json(new_vote)
+        res.json(new_vote)
       }
     })
 }
@@ -29,6 +29,23 @@ let upVote = (req, res) => {
   * End Point : /api/ideas/:ideaid/votes/:voteid
 */
 let getCountVote = (req, res) => {
+  Votes
+    .findAndCountAll({
+      where: {
+        id: req.params.voteid
+      }
+    })
+    .then((votes, err) => {
+      if(err){
+        console.log(err);
+        res.json(err)
+      }else{
+        res.json(votes)
+      }
+    })
+}
+
+let testCountVote = (req, res) => {
   Votes
     .findAndCountAll({
       where: {
@@ -70,5 +87,6 @@ let downVote = (req, res) => {
 module.exports = {
   upVote,
   getCountVote,
-  downVote
+  downVote,
+  testCountVote
 }
