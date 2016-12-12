@@ -74,6 +74,11 @@ let getOneIdea = (req, res) => {
         include: {
           model: Users
         }
+      },{
+        model: Reports,
+        include: {
+          model: Users
+        }
       }]
     })
     .then((one_idea, err) => {
@@ -106,6 +111,11 @@ let getAllIdeas = (req, res) => {
         model: Votes
       },{
         model: Roles,
+        include: {
+          model: Users
+        }
+      },{
+        model: Reports,
         include: {
           model: Users
         }
