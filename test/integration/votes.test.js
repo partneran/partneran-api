@@ -12,6 +12,9 @@ chai.use(chaiHTTP)
 */
 const models = require ('../../models')
 const Votes = models.Votes
+const Users = models.Users
+const Ideas = models.Ideas
+const Categories = models.Categories
 
 /*
   * URL
@@ -28,18 +31,65 @@ describe('Testing Votes Model', () => {
       .destroy({
         where: {}
       })
-    Votes
-      .create({
-        voteId: 1,
-        votes: 1
+    Users
+      .destroy({
+        where: {}
       })
-      .then(() => {
-        done()
+    Ideas
+      .destroy({
+        where: {}
+      })
+    Categories
+      .destroy({
+        where: {}
+      })
+
+      Users.register({
+        userId: 1,
+        email: "test@tet12313123s.com",
+        // photo_URL: req.body.photo_URL,
+        verify: false,
+        name: "test",
+        isSuper: 'LOL'
+      }, "123", (err, new_user) => {
+        Categories
+          .create({
+            name: "EdTech"
+          })
+        Ideas
+          .create({
+            ideaId: 1,
+            UserId: new_user.id,
+            category: "EdTech"
+          }).then((idea) => {
+              Votes
+                .create({
+                  voteId: 1,
+                  votes: 1,
+                  UserId: new_user.id,
+                  IdeaId: idea.id
+                })
+                .then(() => {
+                  done()
+                })
+          })
       })
   })
 
   afterEach('should delete all votes from database', (done) => {
     Votes
+      .destroy({
+        where: {}
+      })
+    Ideas
+      .destroy({
+        where: {}
+      })
+    Categories
+      .destroy({
+        where: {}
+      })
+    Users
       .destroy({
         where: {}
       })
@@ -58,21 +108,31 @@ describe('Testing Votes Model', () => {
   */
   describe('Create one vote', () => {
     it('should create one vote', (done) => {
-      Votes
-        .create({
-          voteId: 1,
-          votes: 1
-        })
-        .then((new_vote) => {
-          expect(new_vote.dataValues).to.be.an('object')
-          expect(new_vote.dataValues).to.have.ownProperty("voteId")
-          expect(new_vote.dataValues).to.have.ownProperty("votes")
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Votes
+            .create({
+              voteId: 1,
+              votes: 1,
+              UserId: all_users[0].id,
+              IdeaId: idea.id
+            })
+            .then((new_vote) => {
+              expect(new_vote.dataValues).to.be.an('object')
+              expect(new_vote.dataValues).to.have.ownProperty("voteId")
+              expect(new_vote.dataValues).to.have.ownProperty("votes")
 
-          new_vote.voteId.should.equal(1)
-          new_vote.votes.should.equal(1)
+              new_vote.voteId.should.equal(1)
+              new_vote.votes.should.equal(1)
 
-          done()
+              done()
+            })
         })
+      })
     })
   })
 
@@ -142,26 +202,36 @@ describe('Testing Votes Model', () => {
   */
   describe('Up vote using API End Point', () => {
     it('should get data from API End Point when up vote', (done) => {
-      chai
-        .request(URL)
-        .post('/api/ideas/1/votes/')
-        .send({
-          voteId: 1,
-          votes: 1
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          chai
+            .request(URL)
+            .post('/api/ideas/'+idea.id+'/votes/')
+            .send({
+              voteId: 1,
+              votes: 1,
+              UserId: all_users[0].id,
+              IdeaId: idea.id
+            })
+            .end((err, res) => {
+              res.should.be.json
+              res.should.have.status(200)
+
+              expect(res.body).to.be.an('object')
+              expect(res.body).to.have.ownProperty("voteId")
+              expect(res.body).to.have.ownProperty("votes")
+
+              res.body.voteId.should.equal(1)
+              res.body.votes.should.equal(1)
+
+              done()
+            })
         })
-        .end((err, res) => {
-          res.should.be.json
-          res.should.have.status(200)
-
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.ownProperty("voteId")
-          expect(res.body).to.have.ownProperty("votes")
-
-          res.body.voteId.should.equal(1)
-          res.body.votes.should.equal(1)
-
-          done()
-        })
+      })
     })
   })
 
@@ -172,27 +242,35 @@ describe('Testing Votes Model', () => {
   */
   describe('Get vote\'s count using API End Point', () => {
     it('should get vote\'s count from API End Point', (done) => {
-      Votes
-        .findAll()
-        .then((all_votes) => {
-          chai
-            .request(URL)
-            .get('/api/ideas/1/votes/testcount/'+all_votes[0].id)
-            .end((err, res) => {
-              res.should.be.json
-              res.should.have.status(200)
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Votes
+            .findAll()
+            .then((all_votes) => {
+              chai
+                .request(URL)
+                .get('/api/ideas/'+idea.id+'/votes/testcount/'+all_votes[0].id)
+                .end((err, res) => {
+                  res.should.be.json
+                  res.should.have.status(200)
 
-              expect(res.body).to.be.an('object')
-              expect(res.body.rows[0]).to.have.property("voteId")
-              expect(res.body.rows[0]).to.have.property("votes")
+                  expect(res.body).to.be.an('object')
+                  expect(res.body.rows[0]).to.have.property("voteId")
+                  expect(res.body.rows[0]).to.have.property("votes")
 
-              res.body.count.should.equal(1)
-              res.body.rows[0].voteId.should.equal(all_votes[0].voteId)
-              res.body.rows[0].votes.should.equal(all_votes[0].votes)
+                  res.body.count.should.equal(1)
+                  res.body.rows[0].voteId.should.equal(all_votes[0].voteId)
+                  res.body.rows[0].votes.should.equal(all_votes[0].votes)
 
-              done()
+                  done()
+                })
             })
         })
+      })
     })
   })
 
@@ -203,21 +281,29 @@ describe('Testing Votes Model', () => {
   */
   describe('Down vote using API End Point', () => {
     it('should delete 1 vote from API End Point when down vote', (done) => {
-      Votes
-        .findAll()
-        .then((all_votes) => {
-          chai
-            .request(URL)
-            .delete('/api/ideas/1/votes/'+all_votes[0].id)
-            .end((err, res) => {
-              res.should.be.json
-              res.should.have.status(200)
+      Users.findAll().then((all_users) => {
+        Ideas.findOne({
+          where: {
+            UserId: all_users[0].id
+          }
+        }).then((idea) => {
+          Votes
+            .findAll()
+            .then((all_votes) => {
+              chai
+                .request(URL)
+                .delete('/api/ideas/'+idea.id+'/votes/'+all_votes[0].id)
+                .end((err, res) => {
+                  res.should.be.json
+                  res.should.have.status(200)
 
-              expect(res.body).to.be.equal(1)
+                  expect(res.body).to.be.equal(1)
 
-              done()
+                  done()
+                })
             })
         })
+      })
     })
   })
 

@@ -23,7 +23,25 @@ let createNewComment = (req, res) => {
         console.log(err);
         res.json(err)
       }else{
-        res.json(new_comment)
+        // res.json(new_comment)
+        Comments
+          .findOne({
+            where: {
+              id: new_comment.id
+            },
+            include: [{
+              model: Users
+            },{
+              model: Ideas
+            }]
+          })
+          .then((one_comment, err) => {
+            if(err){
+              res.json(err)
+            }else{
+              res.json(one_comment)
+            }
+          })
       }
     })
 }

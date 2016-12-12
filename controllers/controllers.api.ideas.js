@@ -41,7 +41,45 @@ let createNewIdea = (req, res) => {
               console.log(err)
               res.json(err)
             }else{
-              res.json(new_idea)
+              // res.json(new_idea)
+              Ideas
+                .findOne({
+                  where: {
+                    id: new_idea.id
+                  },
+                  include: [{
+                    model: Users
+                  },{
+                    model: Categories
+                  },{
+                    model: Comments,
+                    include: {
+                      model: Users
+                    }
+                  },{
+                    model: Votes,
+                    include: {
+                      model: Users
+                    }
+                  },{
+                    model: Roles,
+                    include: {
+                      model: Users
+                    }
+                  },{
+                    model: Reports,
+                    include: {
+                      model: Users
+                    }
+                  }]
+                })
+                .then((one_idea, err) => {
+                  if(err){
+                    res.json(err)
+                  }else{
+                    res.json(one_idea)
+                  }
+                })
             }
           })
     })
@@ -68,7 +106,10 @@ let getOneIdea = (req, res) => {
           model: Users
         }
       },{
-        model: Votes
+        model: Votes,
+        include: {
+          model: Users
+        }
       },{
         model: Roles,
         include: {
@@ -108,7 +149,10 @@ let getAllIdeas = (req, res) => {
           model: Users
         }
       },{
-        model: Votes
+        model: Votes,
+        include: {
+          model: Users
+        }
       },{
         model: Roles,
         include: {
