@@ -71,7 +71,7 @@ describe('Testing Module Ideas', () => {
     * test create an idea
     * end point : /api/ideas
   */
-  describe.only('Create one idea', () => {
+  describe('Create one idea', () => {
     it('should create one idea', (done) => {
       var new_idea_testing = {
         ideaId: 1,
@@ -238,7 +238,7 @@ describe('Testing Module Ideas', () => {
     * method : POST
     * End Point : /api/ideas
   */
-  describe('Create an idea using API End Point', () => {
+  describe.only('Create an idea using API End Point', () => {
     it('should get data from API End Point to create an idea and get new idea', (done) => {
       var new_idea_testing = {
         ideaId: 1,
@@ -246,7 +246,8 @@ describe('Testing Module Ideas', () => {
         description: "test description idea",
         status: 'baby',
         image: "test image idea",
-        video: "test image video"
+        video: "test image video",
+        category: "EdTech"
       }
       chai
         .request(URL)
@@ -256,7 +257,8 @@ describe('Testing Module Ideas', () => {
           title: new_idea_testing.title,
           description: new_idea_testing.description,
           image: new_idea_testing.image,
-          video: new_idea_testing.video
+          video: new_idea_testing.video,
+          category: new_idea_testing.category
         })
         .end((err, res) => {
           res.should.be.json
