@@ -18,6 +18,7 @@ module.exports = function(sequelize, DataTypes) {
         Ideas.belongsTo(models.Categories)
         Ideas.hasMany(models.Comments)
         Ideas.hasMany(models.Roles)
+        Ideas.hasMany(models.Votes)
       }
     }
   });

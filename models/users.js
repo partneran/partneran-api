@@ -30,6 +30,7 @@ module.exports = function(sequelize, DataTypes) {
         Users.hasMany(models.Ideas)
         Users.hasMany(models.Comments)
         Users.hasMany(models.Roles)
+        Users.hasMany(models.Votes)
       }
     }
   });
