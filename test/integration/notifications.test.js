@@ -145,7 +145,7 @@ describe('Testing Notifications Model', () => {
     * method : POST
     * End Point : /api/notif
   */
-  describe.only('Create one notification using API End Point', () => {
+  describe('Create one notification using API End Point', () => {
     it('should get data from API End Point when create one notification', (done) => {
       var new_notif = {
         notificationId: 1,
@@ -184,7 +184,7 @@ describe('Testing Notifications Model', () => {
     * method : PUT
     * End Point : /api/notif/:notifid
   */
-  describe.only('Edit one notification using API End Point', () => {
+  describe('Edit one notification using API End Point', () => {
     it('should get data from API End Point when edit one notification', (done) => {
       var update_data = {
         status: true
@@ -223,7 +223,7 @@ describe('Testing Notifications Model', () => {
     * method : DELETE
     * End Point : /api/notif/:notifid
   */
-  describe.only('Delete one report using API End Point', () => {
+  describe('Delete one report using API End Point', () => {
     it('should get data from API End Point when delete one report', (done) => {
       Notifications
         .findAll()
