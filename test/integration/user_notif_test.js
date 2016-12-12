@@ -40,7 +40,7 @@ describe('Testing User_notif Model', () => {
     done()
   })
 
-  describe.only('Create one User_notif', () => {
+  describe('Create one User_notif', () => {
     it('should create one User_notif to database', (done) => {
       User_notifs
         .create({
@@ -58,7 +58,7 @@ describe('Testing User_notif Model', () => {
     })
   })
 
-  describe.only('Delete one User_notif', () => {
+  describe('Delete one User_notif', () => {
     it('should delete one User_notif to database', (done) => {
       User_notifs
         .findAll()
