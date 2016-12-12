@@ -136,7 +136,7 @@ describe('Testing Reports Model', () => {
     * method : POST
     * End Point : /api/ideas/:ideaid/reports/
   */
-  describe.only('Create one report using API End Point', () => {
+  describe('Create one report using API End Point', () => {
     it('should get data from API End Point when create one report', (done) => {
       var new_report = {
         reportId: 1,
@@ -175,7 +175,7 @@ describe('Testing Reports Model', () => {
     * method : GET
     * End Point : /api/ideas/:ideaid/reports/
   */
-  describe.only('Get all reports using API End Point', () => {
+  describe('Get all reports using API End Point', () => {
     it('should get all data reports from API End Point', (done) => {
       chai
         .request(URL)
@@ -184,7 +184,8 @@ describe('Testing Reports Model', () => {
           res.should.be.json
           res.should.have.status(200)
 
-          expect(res.body).to.be.an('object')
+          expect(res.body).to.be.an('array')
+
           res.body.map((report) => {
             expect(report).to.have.ownProperty("reportId")
             expect(report).to.have.ownProperty("reason")
@@ -194,6 +195,8 @@ describe('Testing Reports Model', () => {
           res.body[0].reportId.should.equal(1)
           res.body[0].reason.should.equal("This author's idea is copied form my own original idea!")
           res.body[0].status.should.equal(false)
+
+          done()
         })
     })
   })
@@ -203,7 +206,7 @@ describe('Testing Reports Model', () => {
     * method : DELETE
     * End Point : /api/ideas/:ideaid/reports/:reportid
   */
-  describe.only('Delete one report using API End Point', () => {
+  describe('Delete one report using API End Point', () => {
     it('should get data from API End Point when delete one report', (done) => {
       Reports
         .findAll()
