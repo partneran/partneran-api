@@ -148,7 +148,15 @@ Default development port and host : http://localhost:3000/
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/ideas/:ideaid/votes/ | POST | add 1 vote |
-| /api/ideas/:ideaid/votes/ | DELETE | remove 1 vote |
+| /api/ideas/:ideaid/votes/ | GET | show vote's total count base on each idea |
+| /api/ideas/:ideaid/votes/:voteid | DELETE | remove 1 vote |
+
+#### Reports
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/ideas/:ideaid/reports/ | POST | add 1 report |
+| /api/ideas/:ideaid/reports/ | GET | show all reports |
+| /api/ideas/:ideaid/reports/:reportid | DELETE | remove 1 report |
 
 #### Notifications
 | Routes | HTTP | Description |
