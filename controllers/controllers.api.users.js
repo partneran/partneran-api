@@ -192,7 +192,7 @@ let submitEmailForgotPassword = (req, res) => {
                     email: req.body.email,
                   },
                 ],
-                subject: 'Hello '+user_forgot.name+' Change Password',
+                subject: 'Hello '+user_forgot.name+'.Email Verification to Change Your Password',
               },
             ],
             from: {
@@ -202,7 +202,7 @@ let submitEmailForgotPassword = (req, res) => {
               {
                 type: 'text/html',
                 value: `Hello ${user_forgot.name}, This email was sent from <a href="http://partneran.net" target="_blank">partneran.net</a><br /><br />
-                Click this link below to change new password:<br /> <a href="http://localhost:8080/api/auth/verification/forgot/${token}">Change Your Password</a>`,
+                Click this link below to change new password:<br /> <a href="http://localhost:3000/verify-password/${token}">Change Your Password</a>`,
               },
             ],
           },
