@@ -5,45 +5,115 @@ const models = require ('../models')
 const Comments = models.Comments
 const Users = models.Users
 const Ideas = models.Ideas
+const Roles = models.Roles
 
 /*
   * method : POST
   * End Point : /api/ideas/:ideaid/comments
 */
 let createNewComment = (req, res) => {
-  Comments
+  /*
+  Roles
     .create({
-      commentId: req.body.commentId,
-      content: req.body.content,
+      roleId: req.body.roleId,
+      roles: "Member",
       UserId: req.body.UserId,
       IdeaId: req.params.ideaid
     })
-    .then((new_comment, err) => {
-      if(err){
-        console.log(err);
-        res.json(err)
-      }else{
-        // res.json(new_comment)
-        Comments
-          .findOne({
-            where: {
-              id: new_comment.id
-            },
-            include: [{
-              model: Users
-            },{
-              model: Ideas
-            }]
-          })
-          .then((one_comment, err) => {
-            if(err){
-              res.json(err)
-            }else{
-              res.json(one_comment)
-            }
-          })
-      }
+    .then(() => {
     })
+  */
+  Roles.findOne({
+    where: {
+      UserId: req.body.UserId,
+      IdeaId: req.params.ideaid
+    }
+  }).then((one_role) => {
+    if(one_role === null){
+      Roles
+        .create({
+          roleId: req.body.roleId,
+          roles: "Member",
+          UserId: req.body.UserId,
+          IdeaId: req.params.ideaid
+        })
+        .then((role) => {
+          Comments
+            .create({
+              commentId: req.body.commentId,
+              content: req.body.content,
+              UserId: req.body.UserId,
+              IdeaId: req.params.ideaid
+            })
+            .then((new_comment, err) => {
+              if(err){
+                console.log(err);
+                res.json(err)
+              }else{
+                // res.json(new_comment)
+                  Comments
+                    .findOne({
+                      where: {
+                        id: new_comment.id
+                      },
+                      include: [{
+                        model: Users,
+                        include: {
+                          model: Roles
+                        }
+                      },{
+                        model: Ideas
+                      }]
+                    })
+                    .then((one_comment, err) => {
+                      if(err){
+                        res.json(err)
+                      }else{
+                        res.json(one_comment)
+                      }
+                    })
+              }
+            })
+        })
+    }else{
+      Comments
+        .create({
+          commentId: req.body.commentId,
+          content: req.body.content,
+          UserId: req.body.UserId,
+          IdeaId: req.params.ideaid
+        })
+        .then((new_comment, err) => {
+          if(err){
+            console.log(err);
+            res.json(err)
+          }else{
+            // res.json(new_comment)
+              Comments
+                .findOne({
+                  where: {
+                    id: new_comment.id
+                  },
+                  include: [{
+                    model: Users,
+                    include: {
+                      model: Roles
+                    }
+                  },{
+                    model: Ideas
+                  }]
+                })
+                .then((one_comment, err) => {
+                  if(err){
+                    res.json(err)
+                  }else{
+                    res.json(one_comment)
+                  }
+                })
+          }
+        })
+    }
+  })
 }
 
 /*

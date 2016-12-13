@@ -28,13 +28,15 @@ describe('Testing Categories Model', () => {
       .destroy({
         where: {}
       })
-    Categories
-      .create({
-        categoryId: 1,
-        name: "test name category"
-      })
       .then(() => {
-        done()
+      Categories
+        .create({
+          categoryId: 1,
+          name: "test name category"
+        })
+        .then(() => {
+          done()
+        })
       })
   })
 

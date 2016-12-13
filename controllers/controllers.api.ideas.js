@@ -42,43 +42,52 @@ let createNewIdea = (req, res) => {
               res.json(err)
             }else{
               // res.json(new_idea)
-              Ideas
-                .findOne({
-                  where: {
-                    id: new_idea.id
-                  },
-                  include: [{
-                    model: Users
-                  },{
-                    model: Categories
-                  },{
-                    model: Comments,
-                    include: {
-                      model: Users
-                    }
-                  },{
-                    model: Votes,
-                    include: {
-                      model: Users
-                    }
-                  },{
-                    model: Roles,
-                    include: {
-                      model: Users
-                    }
-                  },{
-                    model: Reports,
-                    include: {
-                      model: Users
-                    }
-                  }]
+              Roles
+                .create({
+                  roleId: req.body.roleId,
+                  roles: "Initiator",
+                  UserId: req.body.UserId,
+                  IdeaId: new_idea.id
                 })
-                .then((one_idea, err) => {
-                  if(err){
-                    res.json(err)
-                  }else{
-                    res.json(one_idea)
-                  }
+                .then(() => {
+                  Ideas
+                    .findOne({
+                      where: {
+                        id: new_idea.id
+                      },
+                      include: [{
+                        model: Users
+                      },{
+                        model: Categories
+                      },{
+                        model: Comments,
+                        include: {
+                          model: Users
+                        }
+                      },{
+                        model: Votes,
+                        include: {
+                          model: Users
+                        }
+                      },{
+                        model: Roles,
+                        include: {
+                          model: Users
+                        }
+                      },{
+                        model: Reports,
+                        include: {
+                          model: Users
+                        }
+                      }]
+                    })
+                    .then((one_idea, err) => {
+                      if(err){
+                        res.json(err)
+                      }else{
+                        res.json(one_idea)
+                      }
+                    })
                 })
             }
           })

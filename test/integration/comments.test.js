@@ -15,6 +15,7 @@ const Comments = models.Comments
 const Users = models.Users
 const Ideas = models.Ideas
 const Categories = models.Categories
+const Roles = models.Roles
 
 /*
   * URL
@@ -63,15 +64,24 @@ describe('Testing Module Comments', () => {
             UserId: new_user.id,
             category: "EdTech"
           }).then((idea) => {
-            Comments
+            Roles
               .create({
-                commentId: 1,
-                content: "seed data comment",
+                roleId: 1,
+                roles: "Initiator",
                 UserId: new_user.id,
                 IdeaId: idea.id
               })
               .then(() => {
-                done()
+                Comments
+                  .create({
+                    commentId: 1,
+                    content: "seed data comment",
+                    UserId: new_user.id,
+                    IdeaId: idea.id
+                  })
+                  .then(() => {
+                    done()
+                  })
               })
           })
       })
@@ -87,6 +97,10 @@ describe('Testing Module Comments', () => {
         where: {}
       })
     Categories
+      .destroy({
+        where: {}
+      })
+    Roles
       .destroy({
         where: {}
       })
@@ -259,8 +273,7 @@ describe('Testing Module Comments', () => {
             .send({
               commentId: new_comment_testing.commentId,
               content: new_comment_testing.content,
-              UserId: all_users[0].id,
-              IdeaId: idea.id
+              UserId: all_users[0].id
             })
             .end((err, res) => {
               res.should.be.json
