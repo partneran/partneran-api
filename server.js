@@ -179,6 +179,6 @@ add FK UserId to List_approves table
 sequelize migration:create --name add_FK_UserId_to_User_List_approves_table
 
 add FK IdeaId to List_approves table
-sequelize migration:create --name add_FK_notificationId_to_User_List_approves_table
+sequelize migration:create --name add_FK_idead_to_User_List_approves_table
 
 */

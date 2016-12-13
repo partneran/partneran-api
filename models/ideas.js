@@ -21,6 +21,7 @@ module.exports = function(sequelize, DataTypes) {
         Ideas.hasMany(models.Votes)
         Ideas.hasMany(models.Reports)
         Ideas.hasMany(models.Notifications)
+        Ideas.hasMany(models.List_approves)
       }
     }
   });
