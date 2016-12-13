@@ -15,7 +15,7 @@ const routeVotes = require('./routes/routes.api.votes')
 const routeReports = require('./routes/routes.api.reports')
 const routeNotifs = require('./routes/routes.api.notifs')
 const routeCategories = require('./routes/routes.api.categories')
-
+const routeListApproves = require('./routes/routes.api.list_approves')
 
 /*
   * Models
@@ -46,6 +46,7 @@ app.use('/api/ideas', routeVotes)
 app.use('/api/ideas', routeReports)
 app.use('/api/notif', routeNotifs)
 app.use('/api/categories', routeCategories)
+app.use('/api/list_approves', routeListApproves)
 
 // passport.use(new LocalStrategy(Users.authenticate()))
 passport.use(new LocalStrategy({

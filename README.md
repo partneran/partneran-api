@@ -182,3 +182,5 @@ Default development port and host : http://localhost:3000/
 |--------|------|-------------|
 | /api/list_approves/ | POST | one user want to join idea's conversation, status mark as false |
 | /api/list_approves/:list_approve_id | PUT | initiator accept user who want to join idea's conversation, status mark as true |
+| /api/list_approves/ | GET | get all list_approves by user who post idea |
+| /api/list_approves/:list_approve_id | DELETE | delete a list_approves |
