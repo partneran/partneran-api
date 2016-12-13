@@ -53,7 +53,8 @@ let signUpUser = (req, res, next) => {
                 // photo_URL: req.body.photo_URL,
                 verify: false,
                 isSuper: 'super',
-                verify: false
+                verify: false,
+                status: 'baby'
             }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
 
   var transport = nodemailer.createTransport(smtpTransport({
@@ -89,7 +90,8 @@ let signUpUser = (req, res, next) => {
             name: req.body.name,
             // photo_URL: req.body.photoURL,
             verify: false,
-            isSuper: 'user'
+            isSuper: 'user',
+            status: 'baby'
           }, req.body.password, (err, new_user) => {
             if(err){
               console.log(err);
@@ -112,7 +114,8 @@ let signUpUser = (req, res, next) => {
                         photo_URL: user.photo_URL,
                         short_bio: user.short_bio,
                         verify: user.verify,
-                        isSuper: user.isSuper
+                        isSuper: user.isSuper,
+                        status: user.status
                       }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
                     })
                   }else{
@@ -154,7 +157,8 @@ let loginUser = (req, res, next) => {
             photo_URL: user.photo_URL,
             short_bio: user.short_bio,
             verify: user.verify,
-            isSuper: user.isSuper
+            isSuper: user.isSuper,
+            status: user.status
           }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
         })
       }else{
