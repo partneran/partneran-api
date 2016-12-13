@@ -26,6 +26,8 @@
     "express-jwt": "^5.1.0",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
+    "mailcomposer": "^4.0.0",
+    "mailgun-js": "^0.7.14",
     "morgan": "^1.7.0",
     "multer": "^1.2.0",
     "nodemailer": "^2.7.0",
@@ -35,6 +37,7 @@
     "passport-local": "^1.0.0",
     "passport-local-sequelize": "^0.6.0",
     "pg": "^6.1.0",
+    "sendgrid": "^4.7.1",
     "sequelize": "^3.27.0",
     "slug": "^0.9.1"
   },
