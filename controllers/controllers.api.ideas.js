@@ -93,7 +93,6 @@ let createNewIdea = (req, res) => {
             }
           })
     })
-
 }
 
 /*
