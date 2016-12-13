@@ -4,6 +4,7 @@
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const decode = require('jwt-decode')
+const ImgUpload = require('../helpers/ImgUploader')
 
 /*
   * Models

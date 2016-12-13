@@ -11,6 +11,7 @@ const Roles = models.Roles
 const Reports = models.Reports
 
 const slug = require('slug')
+const ImgUpload = require('../helpers/ImgUploader')
 
 /*
   * method : POST
