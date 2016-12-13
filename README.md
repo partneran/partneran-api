@@ -98,6 +98,13 @@ user_notif_id: DataTypes.INTEGER,
 userId: DataTypes.INTEGER(FK),
 notificationId: DataTypes.INTEGER(FK)
 ```
+## List_approves
+```javascript
+list_approve_id: DataTypes.INTEGER,
+status: DataTypes.BOOLEAN,
+userId: DataTypes.INTEGER(FK),
+ideaId: DataTypes.INTEGER(FK)
+```
 
 ## API
 Default development port and host : http://localhost:3000/
@@ -169,3 +176,9 @@ Default development port and host : http://localhost:3000/
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/categories/ | GET | show all categories |
+
+#### List_approves
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/list_approves/ | POST | one user want to join idea's conversation, status mark as false |
+| /api/list_approves/:list_approve_id | PUT | initiator accept user who want to join idea's conversation, status mark as true |

@@ -172,4 +172,13 @@ sequelize migration:create --name add_FK_UserId_to_User_Notifs_table
 add FK IdeaId to User_Notifs table
 sequelize migration:create --name add_FK_notificationId_to_User_Notifs_table
 
+MODULE List_Approve
+sequelize model:create --name List_approves --attributes "list_approve_id:integer,status:boolean"
+
+add FK UserId to List_approves table
+sequelize migration:create --name add_FK_UserId_to_User_List_approves_table
+
+add FK IdeaId to List_approves table
+sequelize migration:create --name add_FK_notificationId_to_User_List_approves_table
+
 */
