@@ -176,35 +176,49 @@ let submitEmailForgotPassword = (req, res) => {
                       name: user_forgot.name,
                       email: user_forgot.email,
                       photo_URL: user_forgot.photo_URL,
-                      verify: user_forgot.verify
+                      verify: user_forgot.verify,
+                      isSuper: user_forgot.isSuper,
+                      status: user_forgot.status
                   }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
-
-          var transport = nodemailer.createTransport(smtpTransport({
-            host: 'email-smtp.us-east-1.amazonaws.com',
-            port: 465,
-            secure: true,
-            auth: {
-              user: process.env.AWS_SES_USERNAME,
-              pass: process.env.AWS_SES_PASSWORD
-            }
-          }));
-
-        var mailOptions = {
-          from: 'admin <kenduigraha@yahoo.com>', // sender address
-          to: req.body.email, // list of receivers
-          subject: 'Forgot password verification', // Subject line
-          // text: 'Hello world', // plaintext body
-          html: `<a href="http://localhost:8080/api/auth/verification/forgot/${token}" target="_blank"></a>` // html body
-        };
-
-        transport.sendMail(mailOptions, function(error, info) {
-          if (error) {
-            console.log(error);
-          }
-          else{
-            console.log('Message sent: ' + info.response);
-            res.json(user_forgot)
-          }
+        var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+        var request = sg.emptyRequest({
+          method: 'POST',
+          path: '/v3/mail/send',
+          body: {
+            personalizations: [
+              {
+                to: [
+                  {
+                    email: req.body.email,
+                  },
+                ],
+                subject: 'Hello '+user_forgot.name+'.Email Verification to Change Your Password',
+              },
+            ],
+            from: {
+              email: 'no-reply@partneran.net',
+            },
+            content: [
+              {
+                type: 'text/html',
+                value: `Hello ${user_forgot.name}, This email was sent from <a href="http://partneran.net" target="_blank">partneran.net</a><br /><br />
+                Click this link below to change new password:<br /> <a href="http://localhost:3000/verify-password/${token}">Change Your Password</a>`,
+              },
+            ],
+          },
+        });
+        sg.API(request)
+        .then(response => {
+          // console.log(response.statusCode);
+          // console.log(response.body);
+          // console.log(response.headers);
+          res.json(response)
+        })
+        .catch(error => {
+          //error is an instance of SendGridError
+          //The full response is attached to error.response
+          // console.log(error.response.statusCode);
+          res.json(error)
         });
 
       }
