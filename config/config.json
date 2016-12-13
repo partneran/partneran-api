@@ -16,10 +16,10 @@
     "logging": false
   },
   "production": {
-    "username": "juang",
-    "password": "asalajaasalaja",
+    "username": "tamatamvan",
+    "password": "",
     "database": "db_partneran_test",
-    "host": "dbpartnerantest.cfqqzeef96zv.ap-southeast-1.rds.amazonaws.com:5432",
+    "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
   }
