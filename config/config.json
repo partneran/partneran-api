@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": "partneran_users",
+    "password": "123123",
     "database": "db_partneran_dev",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
   },
   "test": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": "partneran_users",
+    "password": "123123",
     "database": "db_partneran_test",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
   },
   "production": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": "partneran_users",
+    "password": "123123",
     "database": "db_partneran_prod",
     "host": "127.0.0.1",
     "dialect": "postgres",
