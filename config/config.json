@@ -1,15 +1,15 @@
 {
   "development": {
-    "username": "tamatamvan",
-    "password": "",
+    "username": "postgres",
+    "password": "postgres",
     "database": "db_partneran_dev",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
   },
   "test": {
-    "username": "tamatamvan",
-    "password": "",
+    "username": "postgres",
+    "password": "postgres",
     "database": "db_partneran_test",
     "host": "127.0.0.1",
     "dialect": "postgres",
