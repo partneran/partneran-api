@@ -10,7 +10,7 @@ module.exports = {
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
     return queryInterface.addColumn('Users', 'short_bio', {
-      type : Sequelize.STRING
+      type : Sequelize.TEXT
     })
   },
 
