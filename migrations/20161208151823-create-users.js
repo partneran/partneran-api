@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       photo_URL: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       verify: {
         type: Sequelize.BOOLEAN
