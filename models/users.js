@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       unique: true,
     },
-    short_bio: DataTypes.STRING,
+    short_bio: DataTypes.TEXT,
     isSuper: DataTypes.STRING,
     status: DataTypes.STRING
   }, {
