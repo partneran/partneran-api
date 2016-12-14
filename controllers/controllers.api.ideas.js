@@ -112,7 +112,10 @@ let getOneIdea = (req, res) => {
       },{
         model: Comments,
         include: {
-          model: Users
+          model: Users,
+          include: {
+            model: Roles
+          }
         }
       },{
         model: Votes,
