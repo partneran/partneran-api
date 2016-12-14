@@ -33,7 +33,7 @@ let createNewIdea = (req, res) => {
             status: 'baby',
             image: req.body.image,
             video: req.body.video,
-            slug: slug(req.body.title),
+            slug: slug(req.body.title).toLowerCase(),
             UserId: req.body.UserId,
             CategoryId: one_category.id
           })
