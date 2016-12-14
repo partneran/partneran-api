@@ -94,7 +94,7 @@ let signUpUser = (req, res, next) => {
                     {
                       type: 'text/html',
                       value: `Hello ${req.body.name}, Thankyou for register in <a href="http://partneran.net" target="_blank">partneran.net</a><br /><br />
-                      Click this link below to verify:<br /> <a href="http://localhost:8080/api/auth/verification/${token}">Verify Your Account</a>`,
+                      Click this link below to verify:<br /> <a href="http://localhost:3000/verify-user/${token}">Verify Your Account</a>`,
                     },
                   ],
                 },
@@ -201,6 +201,7 @@ let verificationNewUser = (req, res) => {
         res.json(err)
       }else{
         // console.log(one_data);
+        console.log(`verified`);
         one_data.verify = true
         one_data.save()
         res.json(one_data)
