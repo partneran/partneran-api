@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     myhash: DataTypes.STRING(1024),
     mysalt: DataTypes.STRING,
-    photo_URL: DataTypes.STRING,
+    photo_URL: DataTypes.TEXT,
     verify: DataTypes.BOOLEAN,
     name: {
       type: DataTypes.STRING,

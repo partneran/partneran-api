@@ -95,11 +95,12 @@ let testingEditOneUser = (req, res) => {
   * add field photo_URL & short_bio, edit name, email
 */
 let editOneUser = (req, res) => {
+  console.log('ini ----> ' + JSON.stringify(req.body));
   upload(req, res, function (err) {
       if (err) {
         console.log(err);
         return res.json('Error uploading file!', err)
-      }else if (req.file.filename) {
+      }else if (req.body.photo_URL) {
         Users
           .findOne({
               where: {
@@ -114,7 +115,7 @@ let editOneUser = (req, res) => {
               var new_data = {
                 name: req.body.name,
                 email: req.body.email,
-                photo_URL: req.file.filename,
+                photo_URL: req.body.photo_URL,
                 short_bio: req.body.short_bio
               }
 
@@ -123,12 +124,12 @@ let editOneUser = (req, res) => {
               one_data.photo_URL = new_data.photo_URL
               one_data.short_bio = new_data.short_bio
               one_data.save()
-
+              console.log(one_data);
               res.json(one_data)
             }
           })
       }else {
-        res.json('Error no file!', err)
+        res.send('Error no file!', err)
       }
     })
 }
