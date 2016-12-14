@@ -29,10 +29,10 @@ let createNewComment = (req, res) => {
       IdeaId: req.params.ideaid
     }
   }).then((one_role) => {
-    console.log(one_role);
+    // console.log(one_role);
     if(one_role === null){
 
-      console.log(`aaa`);
+      // console.log(`aaa`);
       Roles
         .create({
           roleId: req.body.roleId,
@@ -79,7 +79,7 @@ let createNewComment = (req, res) => {
             })
         })
     }else{
-      console.log(`BB`);
+      // console.log(`BB`);
       Comments
         .create({
           commentId: req.body.commentId,
