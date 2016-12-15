@@ -84,6 +84,7 @@ let testingEditOneUser = (req, res) => {
         one_data.short_bio = new_data.short_bio
         one_data.save()
 
+
         res.json(one_data)
       }
     })
@@ -100,7 +101,7 @@ let editOneUser = (req, res) => {
       if (err) {
         console.log(err);
         return res.json('Error uploading file!', err)
-      }else if (req.body.photo_URL) {
+      }else if (req.body) {
         Users
           .findOne({
               where: {
@@ -125,11 +126,23 @@ let editOneUser = (req, res) => {
               one_data.short_bio = new_data.short_bio
               one_data.save()
               console.log(one_data);
-              res.json(one_data)
+
+              var token = jwt.sign({
+                            sub: one_data.id,
+                            name: one_data.name,
+                            email: one_data.email,
+                            photo_URL: one_data.photo_URL,
+                            short_bio: one_data.short_bio,
+                            verify: one_data.verify,
+                            isSuper: one_data.isSuper,
+                            status: one_data.status
+                        }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
+                        console.log('token: ', token);
+              res.json(token)
             }
           })
       }else {
-        res.send('Error no file!', err)
+        res.send('Error no file!')
       }
     })
 }
