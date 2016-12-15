@@ -204,7 +204,19 @@ let verificationNewUser = (req, res) => {
         console.log(`verified`);
         one_data.verify = true
         one_data.save()
-        res.json(one_data)
+
+        return res.status(200).json({
+          token: jwt.sign({
+            sub: one_data.id,
+            email: one_data.email,
+            name: one_data.name,
+            photo_URL: one_data.photo_URL,
+            short_bio: one_data.short_bio,
+            verify: one_data.verify,
+            isSuper: one_data.isSuper,
+            status: one_data.status
+          }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
+        })
       }
     })
 }

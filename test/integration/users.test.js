@@ -345,22 +345,7 @@ describe('Testing Module Users', () => {
               res.should.have.status(200)
 
               expect(res.body).to.be.an('object')
-              expect(res.body).to.have.ownProperty('userId')
-              expect(res.body).to.have.ownProperty('myhash')
-              expect(res.body).to.have.ownProperty('mysalt')
-              expect(res.body).to.have.ownProperty('email')
-              expect(res.body).to.have.ownProperty('name')
-              expect(res.body).to.have.ownProperty('photo_URL')
-              expect(res.body).to.have.ownProperty('short_bio')
-              expect(res.body).to.have.ownProperty('verify')
-              expect(res.body).to.have.ownProperty('isSuper')
-
-              res.body.userId.should.equal(all_users[0].userId)
-              res.body.name.should.equal(all_users[0].name)
-              res.body.email.should.equal(all_users[0].email)
-              // res.body.photo_URL.should.equal(all_users[0].photo_URL)
-              res.body.verify.should.equal(true)
-              res.body.isSuper.should.equal(all_users[0].isSuper)
+              expect(res.body).to.have.ownProperty('token')
 
               done()
             })
