@@ -423,7 +423,9 @@ describe('Testing Module Ideas', () => {
               title: edit_idea.title,
               description: edit_idea.description,
               image: edit_idea.image,
-              video: edit_idea.video
+              video: edit_idea.video,
+              category: "EdTech",
+              status: "baby"
             })
             .end((err, res) => {
               res.should.be.json
