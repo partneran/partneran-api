@@ -216,7 +216,7 @@ let editOneIdea = (req, res) => {
             new_idea.image = req.body.image
             new_idea.video = req.body.video
             new_idea.status = req.body.status
-            new_idea.slug = slug(req.body.title)
+            new_idea.slug = slug(req.body.title).toLowerCase()
             new_idea.CategoryId = category.id
             new_idea.save()
 
