@@ -19,6 +19,7 @@ server side of partneran
 15. chai
 16. dotenv
 17. chai-http
+18. multer
 
 # Testing
 ## Integration (End Point)
@@ -35,6 +36,7 @@ email: DataTypes.STRING,
 myhash: DataTypes.STRING(1024),
 mysalt: DataTypes.STRING,
 photo_URL: DataTypes.STRING,
+short_bio: DataTypes.STRING,
 verify: DataTypes.BOOLEAN
 ```
 ## Roles
@@ -48,55 +50,60 @@ ideaId: DataTypes.INTEGER(FK)
 ```javascript
 ideaId: DataTypes.INTEGER,
 title: DataTypes.STRING,
-description: DataTypes.STRING,
+description: DataTypes.TEXT,
 status: DataTypes.STRING,
 image: DataTypes.STRING,
+video: DataTypes.STRING,
+userId: DataTypes.INTEGER(FK),
 categoryId: DataTypes.INTEGER(FK)
 ```
 ## Votes
 ```javascript
 voteId: DataTypes.INTEGER,
-title: DataTypes.STRING,
-description: DataTypes.STRING,
-status: DataTypes.STRING,
-image: DataTypes.STRING,
-categoryId: DataTypes.INTEGER(FK)
+votes: DataTypes.INTEGER,
+userId: DataTypes.INTEGER(FK),
+ideaId: DataTypes.INTEGER(FK)
 ```
 ## Comments
 ```javascript
 commentId: DataTypes.INTEGER,
-vote: DataTypes.STRING,
-status: DataTypes.BOOLEAN,
-ideaId: DataTypes.INTEGER(FK),
-userId: DataTypes.INTEGER(FK)
+content: DataTypes.STRING,
+userId: DataTypes.INTEGER(FK),
+ideaId: DataTypes.INTEGER(FK)
 ```
 ## Reports
 ```javascript
 reportId: DataTypes.INTEGER,
 reason: DataTypes.STRING,
 status: DataTypes.BOOLEAN,
-userid: DataTypes.INTEGER(FK),
+userId: DataTypes.INTEGER(FK),
 ideaId: DataTypes.INTEGER(FK)
 ```
 ## Category
 ```javascript
 categoryId: DataTypes.INTEGER,
-name: DataTypes.STRING,
-ideaId: DataTypes.INTEGER(FK)
+name: DataTypes.STRING
 ```
 ## Notifications
 ```javascript
 notificationId: DataTypes.INTEGER,
 message: DataTypes.STRING,
 status: DataTypes.BOOLEAN,
-userid: DataTypes.INTEGER(FK),
+userId: DataTypes.INTEGER(FK),
 ideaId: DataTypes.INTEGER(FK)
 ```
 ## User_notifs
 ```javascript
-user_notifId: DataTypes.INTEGER,
-user_receive: DataTypes.STRING,
+user_notif_id: DataTypes.INTEGER,
+userId: DataTypes.INTEGER(FK),
 notificationId: DataTypes.INTEGER(FK)
+```
+## List_approves
+```javascript
+list_approve_id: DataTypes.INTEGER,
+status: DataTypes.BOOLEAN,
+userId: DataTypes.INTEGER(FK),
+ideaId: DataTypes.INTEGER(FK)
 ```
 
 ## API
@@ -132,7 +139,8 @@ Default development port and host : http://localhost:3000/
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/ideas | POST | process new idea |
-| /api/ideas/:ideaid | GET | process show an idea with it's comments |
+| /api/ideas/:slug | GET | show an idea with it's comments |
+| /api/ideas/ | GET |  show all ideas with it's comments |
 | /api/ideas/:ideaid | PUT  | edit an idea |
 | /api/ideas/:ideaid | DELETE | delete an idea |
 
@@ -147,10 +155,32 @@ Default development port and host : http://localhost:3000/
 | Routes | HTTP | Description |
 |--------|------|-------------|
 | /api/ideas/:ideaid/votes/ | POST | add 1 vote |
-| /api/ideas/:ideaid/votes/ | DELETE | remove 1 vote |
+| /api/ideas/:ideaid/votes/ | GET | show vote's total count base on each idea |
+| /api/ideas/:ideaid/votes/:voteid | DELETE | remove 1 vote |
+
+#### Reports
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/ideas/:ideaid/reports/ | POST | add 1 report |
+| /api/ideas/:ideaid/reports/ | GET | show all reports |
+| /api/ideas/:ideaid/reports/:reportid | DELETE | remove 1 report |
 
 #### Notifications
 | Routes | HTTP | Description |
 |--------|------|-------------|
-| /api/notif/ | POST | process new notification & passing ideaId & userId |
-| /api/notif/done | POST | process mark notification as done |
+| /api/notif/ | POST | process new notification |
+| /api/notif/:notifid | PUT | process mark notification as done |
+| /api/notif/:notifid | DELETE | delete one notification |
+
+#### Categories
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/categories/ | GET | show all categories |
+
+#### List_approves
+| Routes | HTTP | Description |
+|--------|------|-------------|
+| /api/list_approves/ | POST | one user want to join idea's conversation, status mark as false |
+| /api/list_approves/:list_approve_id | PUT | initiator accept user who want to join idea's conversation, status mark as true |
+| /api/list_approves/ | GET | get all list_approves by user who post idea |
+| /api/list_approves/:list_approve_id | DELETE | delete a list_approves |
