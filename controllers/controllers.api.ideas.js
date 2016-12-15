@@ -203,13 +203,26 @@ let editOneIdea = (req, res) => {
         console.log(err);
         res.json(err)
       }else{
-        new_idea.title = req.body.title
-        new_idea.description = req.body.description
-        new_idea.image = req.body.image
-        new_idea.video = req.body.video
-        new_idea.save()
+        Categories.findOne({
+          where: {
+            name: req.body.category
+          }
+        }).then((category, err) => {
+          if(err){
+            res.json(err)
+          }else{
+            new_idea.title = req.body.title
+            new_idea.description = req.body.description
+            new_idea.image = req.body.image
+            new_idea.video = req.body.video
+            new_idea.status = req.body.status
+            new_idea.slug = slug(req.body.title)
+            new_idea.CategoryId = category.id
+            new_idea.save()
 
-        res.json(new_idea)
+            res.json(new_idea)
+          }
+        })
       }
     })
 }
