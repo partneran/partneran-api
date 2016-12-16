@@ -182,6 +182,7 @@ let getAllIdeas = (req, res) => {
         console.log(err)
         res.json(err)
       }else{
+        console.log(all_ideas);
         res.json(all_ideas)
       }
     })
