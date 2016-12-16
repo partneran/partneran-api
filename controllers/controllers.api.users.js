@@ -216,8 +216,8 @@ let submitEmailForgotPassword = (req, res) => {
             content: [
               {
                 type: 'text/html',
-                value: `Hello ${user_forgot.name}, This email was sent from <a href="http://partneran.net" target="_blank">partneran.net</a><br /><br />
-                Click this link below to change new password:<br /> <a href="http://localhost:3000/verify-password/${token}" target="_blank">Change Your Password</a>`
+                value: `Hello ${user_forgot.name}, This email was sent from <a href="http://partneran.net">partneran.net</a><br /><br />
+                Click this link below to change new password:<br /> <a href="${process.env.CLIENT_URL}verify-password/${token}">Change Your Password</a>`
               },
             ],
           },

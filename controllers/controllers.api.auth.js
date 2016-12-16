@@ -93,8 +93,8 @@ let signUpUser = (req, res, next) => {
                   content: [
                     {
                       type: 'text/html',
-                      value: `Hello ${req.body.name}, Thankyou for register in <a href="http://partneran.net" target="_blank">partneran.net</a><br /><br />
-                      Click this link below to verify:<br /> <a href="http://localhost:3000/verify-user/${token}">Verify Your Account</a>`,
+                      value: `Hello ${req.body.name}, Thankyou for register in <a href="http://partneran.net">partneran.net</a><br /><br />
+                      Click this link below to verify:<br /> <a href="${process.env.CLIENT_URL}verify-user/${token}">Verify Your Account</a>`,
                     },
                   ],
                 },
