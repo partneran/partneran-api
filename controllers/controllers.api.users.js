@@ -196,6 +196,7 @@ let submitEmailForgotPassword = (req, res) => {
                       status: user_forgot.status
                   }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
         var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+        var link = `http://localhost:3000/verify-password/${token}`
         var request = sg.emptyRequest({
           method: 'POST',
           path: '/v3/mail/send',
