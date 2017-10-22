@@ -126,7 +126,6 @@ let signUpUser = (req, res, next) => {
                        }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
                      })
                    }else{
-                     console.log(`info`);
                      return res.status(400).json(info)
                    }
                  }
