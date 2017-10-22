@@ -10,7 +10,6 @@ const Users = models.Users
   * End Point : /api/ideas/:ideaid/votes/
 */
 let upVote = (req, res) => {
-  console.log(req.body);
   Votes
     .create({
       voteId: req.body.voteId,

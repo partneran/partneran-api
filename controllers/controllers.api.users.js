@@ -96,7 +96,6 @@ let testingEditOneUser = (req, res) => {
   * add field photo_URL & short_bio, edit name, email
 */
 let editOneUser = (req, res) => {
-  console.log('ini ----> ' + JSON.stringify(req.body));
   upload(req, res, function (err) {
       if (err) {
         console.log(err);
@@ -125,7 +124,6 @@ let editOneUser = (req, res) => {
               one_data.photo_URL = new_data.photo_URL
               one_data.short_bio = new_data.short_bio
               one_data.save()
-              console.log(one_data);
 
               var token = jwt.sign({
                             sub: one_data.id,
@@ -137,7 +135,6 @@ let editOneUser = (req, res) => {
                             isSuper: one_data.isSuper,
                             status: one_data.status
                         }, process.env.SECRET_TOKEN, { expiresIn: 60*60 })
-                        console.log('token: ', token);
               res.json(token)
             }
           })
