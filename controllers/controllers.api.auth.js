@@ -71,7 +71,6 @@ let signUpUser = (req, res, next) => {
                             isSuper: 'super'
                         }, process.env.SECRET_TOKEN, { expiresIn: 60*60 }) // expire in 1 hour
 
-              // console.log(process.env.SENDGRID_API_KEY);
               var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
               var request = sg.emptyRequest({
                 method: 'POST',
@@ -134,7 +133,6 @@ let signUpUser = (req, res, next) => {
               .catch(error => {
                 //error is an instance of SendGridError
                 //The full response is attached to error.response
-                // console.log(error.response.statusCode);
                 res.json(error)
               });
             }
@@ -159,7 +157,6 @@ let loginUser = (req, res, next) => {
       return res.status(400).json(err)
     }else{
       if(user != false){
-        // console.log(user);
         return res.status(200).json({
           token: jwt.sign({
             sub: user.id,
@@ -199,8 +196,6 @@ let verificationNewUser = (req, res) => {
         console.log("err", err);
         res.json(err)
       }else{
-        // console.log(one_data);
-        console.log(`verified`);
         one_data.verify = true
         one_data.save()
 
@@ -226,7 +221,6 @@ let verificationNewUser = (req, res) => {
 */
 let verificationForgotPassword = (req, res) => {
   var decoded = jwt_decode(req.params.token)
-  // console.log(decoded);
   Users
     .findOne({
       where: {
@@ -237,8 +231,7 @@ let verificationForgotPassword = (req, res) => {
       if(err){
         console.log("err", err);
         res.json(err)
-      }else{
-        // console.log(one_data);
+      }else{f
         res.json(one_data)
       }
     })
